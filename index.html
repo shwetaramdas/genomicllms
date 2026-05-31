@@ -4,232 +4,143 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BDBio 2026 · LLMs in Genomics</title>
-<meta name="description" content="Resource hub for the workshop on Large Language Models in genomics: foundation models, fine-tunable DNA language models, datasets, benchmarks, and hands-on materials." />
+<meta name="description" content="Resource hub for the BDBio 2026 pre-symposium workshop on large language models in genomics." />
 
 <!-- ════════════════════════════════════════════════════════════════
-     EDIT ME #1 — Page title above, and the workshop details in the
-     hero section below (search for "EDIT ME"). Everything else is
-     a curated resource list you can extend or trim freely.
+     EDIT ME #1 — title above + workshop details in the meta block.
+     EDIT ME #3 — Kaggle / slides links in section 00.
+     EDIT ME #4 — contact + last-reviewed date in the footer.
+     Everything else is a curated resource list you can extend or trim.
      ════════════════════════════════════════════════════════════ -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --ink:#16241d;          /* deep forest ink */
-    --ink-soft:#3c4f45;
-    --paper:#f6f2e9;        /* warm cream */
-    --paper-2:#efe9db;
-    --card:#fffdf8;
-    --line:#ddd5c4;
-    --rust:#bd5237;         /* primary accent */
-    --rust-deep:#8f3a25;
-    /* IGV-style nucleotide colours, used as decorative chips */
-    --A:#3a9d5d; --C:#2f6fb0; --G:#d59321; --T:#c4453c;
-    --radius:14px;
+    --ink:#1a1a1a;     /* headings / near-black */
+    --text:#3f3f3f;    /* body grey */
+    --muted:#6b6b6b;   /* secondary grey */
+    --line:#e2e2e2;    /* hairlines */
+    --bg:#ffffff;
+    --code-bg:#f6f6f6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{
-    font-family:"Hanken Grotesk",system-ui,sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.65;
+    font-size:17px;-webkit-font-smoothing:antialiased;
   }
-  a{color:var(--rust-deep);text-decoration:none;border-bottom:1px solid rgba(143,58,37,.28);transition:.18s}
-  a:hover{color:var(--rust);border-bottom-color:var(--rust)}
-  ::selection{background:var(--G);color:var(--ink)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
 
-  .wrap{max-width:1060px;margin:0 auto;padding:0 28px}
+  a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;
+    text-decoration-thickness:1px;text-decoration-color:#bbb;transition:.15s}
+  a:hover{text-decoration-color:var(--ink)}
 
-  /* ── decorative nucleotide ticker ── */
-  .seq-strip{
-    font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.42em;
-    color:var(--ink);opacity:.32;white-space:nowrap;overflow:hidden;
-    border-bottom:1px solid var(--line);background:var(--paper-2);
-    padding:9px 0;user-select:none;
-  }
-  .seq-strip span{display:inline-block;animation:slide 60s linear infinite}
-  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  h1{font-size:2.3rem;font-weight:700;color:var(--ink);line-height:1.15;
+    letter-spacing:-.01em;margin-bottom:10px}
+  h2{font-size:1.4rem;font-weight:700;color:var(--ink);letter-spacing:-.005em;
+    padding-top:18px;border-top:1px solid var(--line);margin-bottom:4px}
+  h3{font-size:1.05rem;font-weight:600;color:var(--ink);margin:18px 0 4px}
+  h4{font-size:.98rem;font-weight:600;color:var(--ink);margin-bottom:4px}
 
-  /* ── hero ── */
-  header.hero{padding:74px 0 56px;position:relative}
-  .eyebrow{
-    font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;
-    letter-spacing:.28em;text-transform:uppercase;color:var(--rust-deep);
-    margin-bottom:22px;
-  }
-  h1{
-    font-family:"Fraunces",serif;font-weight:900;font-size:clamp(2.7rem,7vw,5rem);
-    line-height:.98;letter-spacing:-.015em;margin-bottom:8px;
-  }
-  h1 em{font-style:italic;font-weight:500;color:var(--rust)}
-  .lede{
-    font-family:"Fraunces",serif;font-weight:400;font-size:clamp(1.1rem,2.4vw,1.5rem);
-    color:var(--ink-soft);max-width:46ch;margin-top:20px;line-height:1.4;
-  }
-  .chips{display:flex;gap:7px;margin:30px 0 4px}
-  .chips b{
-    font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;
-    width:34px;height:34px;display:grid;place-items:center;border-radius:8px;color:#fff;
-  }
-  .chips b:nth-child(1){background:var(--A)} .chips b:nth-child(2){background:var(--T)}
-  .chips b:nth-child(3){background:var(--C)} .chips b:nth-child(4){background:var(--G)}
+  p{margin:10px 0}
+  .eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px}
+  .lede{font-size:1.1rem;color:var(--text);max-width:58ch}
 
-  /* ── workshop meta card (EDIT) ── */
-  .meta{
-    margin-top:38px;background:var(--card);border:1px solid var(--line);
-    border-radius:var(--radius);padding:22px 26px;
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px 28px;
-    box-shadow:0 1px 0 rgba(0,0,0,.02);
-  }
-  .meta .k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--rust-deep);margin-bottom:3px}
-  .meta .v{font-weight:600;font-size:15px;color:var(--ink)}
-  .meta .v small{display:block;font-weight:400;color:var(--ink-soft);font-size:13px}
+  header.hero{padding:56px 0 30px}
 
-  /* ── nav ── */
-  nav.toc{
-    position:sticky;top:0;z-index:20;background:rgba(246,242,233,.86);
-    backdrop-filter:blur(9px);border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);margin-top:54px;
-  }
-  nav.toc ul{list-style:none;display:flex;gap:4px;flex-wrap:wrap;
-    max-width:1060px;margin:0 auto;padding:11px 28px}
-  nav.toc a{
-    font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.02em;
-    color:var(--ink-soft);border:none;padding:5px 12px;border-radius:7px;
-  }
-  nav.toc a:hover{background:var(--paper-2);color:var(--ink)}
+  /* workshop meta */
+  .meta{margin-top:28px;border:1px solid var(--line);border-radius:6px;
+    padding:18px 20px;display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px 26px}
+  .meta .k{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:2px}
+  .meta .v{font-weight:600;color:var(--ink);font-size:.95rem}
+  .meta .v small{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
 
-  /* ── sections ── */
-  section{padding:60px 0 14px}
-  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
-  .sec-num{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--rust);
-    font-weight:700;padding-top:6px}
-  h2{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(1.7rem,3.6vw,2.5rem);
-    letter-spacing:-.01em;line-height:1.05}
-  .sec-sub{color:var(--ink-soft);max-width:62ch;margin:10px 0 30px;font-size:1.02rem}
-  .sec-sub code,p code,td code{font-family:"JetBrains Mono",monospace;font-size:.85em;
-    background:var(--paper-2);padding:1px 6px;border-radius:5px;color:var(--rust-deep)}
+  /* nav */
+  nav.toc{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);
+    backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin-top:34px}
+  nav.toc ul{list-style:none;display:flex;flex-wrap:wrap;gap:2px;
+    max-width:760px;margin:0 auto;padding:10px 24px}
+  nav.toc a{font-size:.83rem;color:var(--muted);text-decoration:none;
+    padding:4px 9px;border-radius:4px}
+  nav.toc a:hover{background:var(--code-bg);color:var(--ink)}
 
-  /* ── resource cards ── */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:22px 22px 20px;position:relative;transition:.2s;overflow:hidden;
-  }
-  .card:hover{transform:translateY(-3px);border-color:var(--rust);
-    box-shadow:0 10px 26px -14px rgba(143,58,37,.4)}
-  .card .tag{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--rust-deep);font-weight:500}
-  .card h3{font-family:"Fraunces",serif;font-weight:600;font-size:1.32rem;
-    margin:7px 0 8px;letter-spacing:-.01em;line-height:1.12}
-  .card p{font-size:.92rem;color:var(--ink-soft);margin-bottom:14px}
-  .card .links{display:flex;flex-wrap:wrap;gap:6px}
-  .card .links a{font-family:"JetBrains Mono",monospace;font-size:11.5px;
-    border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--ink-soft);
-    background:var(--paper);}
-  .card .links a:hover{border-color:var(--rust);color:var(--rust);background:#fff}
-  .card.flag::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;
-    background:var(--rust)}
+  section{padding:34px 0 6px}
+  .sec-num{font-size:.8rem;color:var(--muted);font-weight:600;margin-right:8px}
+  .sec-sub{color:var(--text);max-width:62ch;margin:8px 0 18px}
+  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.86em;
+    background:var(--code-bg);padding:1px 5px;border-radius:4px;color:var(--ink)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:16px 18px;overflow-x:auto;margin:8px 0;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.82rem;
+    line-height:1.7;color:#2a2a2a}
+  pre .c{color:#999}
 
-  /* ── table ── */
-  .tbl{width:100%;border-collapse:collapse;background:var(--card);
-    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:.92rem}
-  .tbl th{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;
-    text-transform:uppercase;text-align:left;color:var(--rust-deep);
-    background:var(--paper-2);padding:12px 16px;border-bottom:1px solid var(--line)}
-  .tbl td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl tr:hover td{background:var(--paper)}
-  .tbl td:first-child{font-weight:600;white-space:nowrap}
-  .tbl .mono{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--ink-soft)}
+  /* resource list */
+  .res{margin:14px 0}
+  .res-item{padding:14px 0;border-bottom:1px solid var(--line)}
+  .res-item:last-child{border-bottom:none}
+  .res-item .tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted)}
+  .res-item h3{margin:2px 0 3px}
+  .res-item p{margin:3px 0 7px;font-size:.95rem;color:var(--text)}
+  .res-item .links{font-size:.86rem;color:var(--muted)}
+  .res-item .links a{color:var(--muted)}
+  .res-item .links a:hover{color:var(--ink)}
+  .badge{font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    border:1px solid var(--line);border-radius:3px;padding:1px 5px;color:var(--muted);
+    margin-left:6px;vertical-align:middle}
 
-  /* ── steps / setup ── */
-  pre{background:var(--ink);color:#e9e3d4;border-radius:var(--radius);padding:20px 22px;
-    overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:.83rem;line-height:1.7;
-    margin:6px 0 4px}
-  pre .c{color:#8aa896}  pre .k{color:var(--G)}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:.92rem;margin:10px 0}
+  th{text-align:left;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--ink)}
+  td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .mono{font-family:ui-monospace,Menlo,monospace;font-size:.82rem;color:var(--muted)}
+  .mono a{color:var(--muted)}.mono a:hover{color:var(--ink)}
 
-  .callout{background:var(--paper-2);border:1px solid var(--line);border-left:4px solid var(--G);
-    border-radius:10px;padding:16px 20px;margin-top:18px;font-size:.93rem;color:var(--ink-soft)}
-  .callout b{color:var(--ink)}
+  /* tutorial box */
+  .tutorial{border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin:14px 0 22px}
+  .tutorial .lbl{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .tt-parts{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:16px 0 4px}
+  .tt-part ul{list-style:none;font-size:.9rem;color:var(--text);margin-top:4px}
+  .tt-part li{padding:3px 0 3px 14px;position:relative}
+  .tt-part li::before{content:"–";position:absolute;left:0;color:var(--muted)}
+  .tt-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .tt-btns a{font-size:.85rem;text-decoration:none;border:1px solid var(--ink);
+    border-radius:5px;padding:7px 14px;color:var(--ink)}
+  .tt-btns a:hover{background:var(--ink);color:#fff}
+  .tt-btns a.ghost{border-color:var(--line);color:var(--muted)}
+  .tt-btns a.ghost:hover{background:var(--code-bg);color:var(--ink);border-color:var(--muted)}
 
-  /* ── featured tutorial ── */
-  .tutorial{background:linear-gradient(135deg,var(--ink),#1f3328);color:#f3eee1;
-    border-radius:var(--radius);padding:30px 30px 26px;margin:8px 0 34px;
-    box-shadow:0 18px 40px -22px rgba(22,36,29,.7);position:relative;overflow:hidden}
-  .tutorial::after{content:"ATCG";position:absolute;right:2px;bottom:-22px;
-    font-family:"JetBrains Mono",monospace;font-weight:700;font-size:120px;
-    color:rgba(255,255,255,.045);letter-spacing:.05em;pointer-events:none}
-  .tutorial .tt{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;
-    text-transform:uppercase;color:var(--G);margin-bottom:8px}
-  .tutorial h3{font-family:"Fraunces",serif;font-weight:900;font-size:1.7rem;margin-bottom:6px;color:#fff}
-  .tutorial > p{color:#cdd8cf;max-width:60ch;font-size:.97rem}
-  .tt-parts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0 6px;position:relative;z-index:1}
-  .tt-part{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-    border-radius:11px;padding:18px}
-  .tt-part h4{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;color:#fff;margin-bottom:4px}
-  .tt-part .lbl{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--G);margin-bottom:8px}
-  .tt-part ul{list-style:none;font-size:.88rem;color:#cdd8cf}
-  .tt-part li{padding:3px 0 3px 16px;position:relative}
-  .tt-part li::before{content:"›";position:absolute;left:0;color:var(--rust);font-weight:700}
-  .tt-part code,.tt-part em{font-family:"JetBrains Mono",monospace;font-size:.82em;color:#f0d9a0;font-style:normal}
-  .tt-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;position:relative;z-index:1}
-  .tt-btns a{font-family:"JetBrains Mono",monospace;font-size:12.5px;font-weight:500;
-    border:none;border-radius:8px;padding:9px 16px;background:var(--rust);color:#fff;transition:.18s}
-  .tt-btns a:hover{background:var(--rust-deep);transform:translateY(-2px)}
-  .tt-btns a.ghost{background:transparent;border:1px solid rgba(255,255,255,.25);color:#f3eee1}
-  .tt-btns a.ghost:hover{background:rgba(255,255,255,.08)}
-  .used{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;
-    letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--rust);
-    border-radius:4px;padding:1px 6px;margin-left:7px;vertical-align:middle}
-  @media(max-width:620px){.tt-parts{grid-template-columns:1fr}}
+  .note{font-size:.9rem;color:var(--muted);border-left:2px solid var(--line);
+    padding:4px 0 4px 14px;margin:14px 0}
 
-  /* ── footer ── */
-  footer{margin-top:70px;border-top:1px solid var(--line);background:var(--paper-2);
-    padding:40px 0 56px}
-  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:flex-end}
-  footer p{font-size:.9rem;color:var(--ink-soft);max-width:48ch}
-  footer .sig{font-family:"Fraunces",serif;font-style:italic;font-size:1.15rem;color:var(--ink)}
+  footer{margin-top:44px;border-top:1px solid var(--line);padding:26px 0 50px}
+  footer p{font-size:.85rem;color:var(--muted)}
 
-  /* entrance animation */
-  .fade{opacity:0;transform:translateY(14px);animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
-  @keyframes rise{to{opacity:1;transform:none}}
-
-  @media(max-width:620px){
-    header.hero{padding:48px 0 36px}
+  @media(max-width:560px){
+    h1{font-size:1.9rem}
+    .tt-parts{grid-template-columns:1fr;gap:14px}
     nav.toc ul{overflow-x:auto;flex-wrap:nowrap}
   }
 </style>
 </head>
 <body>
 
-<!-- decorative DNA ticker -->
-<div class="seq-strip"><span>ATGCCGTTACAGGTACCATGGCATTGACCGTAACGGTTCAGGCATACGATCCGTTAAGCTGACATGGCCATTAGGCATACGT&nbsp;&nbsp;ATGCCGTTACAGGTACCATGGCATTGACCGTAACGGTTCAGGCATACGATCCGTTAAGCTGACATGGCCATTAGGCATACGT&nbsp;&nbsp;</span></div>
-
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow fade">BDBio&nbsp;2026&nbsp;·&nbsp;Workshop&nbsp;Resource&nbsp;Hub</p>
-    <h1 class="fade" style="animation-delay:.05s">Large Language Models<br>in <em>Genomics</em></h1>
-    <div class="chips fade" style="animation-delay:.1s"><b>A</b><b>T</b><b>C</b><b>G</b></div>
-    <p class="lede fade" style="animation-delay:.15s">A curated set of models, datasets, benchmarks and hands-on materials for learning how transformer models read, score and design DNA.</p>
+    <p class="eyebrow">BDBio 2026 · Pre-symposium Workshop</p>
+    <h1>Large Language Models in Genomics</h1>
+    <p class="lede">A curated set of models, datasets, benchmarks and hands-on materials for learning how transformer models read, score and design DNA.</p>
 
-    <!-- ════════════════════════════════════════════════════════════
-         EDIT ME #2 — Workshop details. Replace the [ bracketed ]
-         placeholders. Delete any row you don't need.
-         ════════════════════════════════════════════════════════ -->
-    <div class="meta fade" style="animation-delay:.2s">
-      <div><div class="k">Date</div><div class="v">[ Date ]<small>[ Time ]</small></div></div>
-      <div><div class="k">Venue</div><div class="v">[ Venue / Online ]<small>[ Institution ]</small></div></div>
-      <div><div class="k">Instructors</div><div class="v">[ Name ]<small>[ Affiliation ]</small></div></div>
-      <div><div class="k">Audience</div><div class="v">Mixed ML&nbsp;/&nbsp;biology<small>No prior NLP assumed</small></div></div>
+    <div class="meta">
+      <div><div class="k">Date</div><div class="v">4 June 2026</div></div>
+      <div><div class="k">Repository</div><div class="v"><a href="https://github.com/shwetaramdas/genomicllms">github.com/shwetaramdas/genomicllms</a></div></div>
+      <div><div class="k">New here?</div><div class="v"><a href="concepts.html">Start with the concepts primer →</a></div></div>
     </div>
   </div>
 </header>
@@ -244,6 +155,7 @@
       <li><a href="#data">04 · Data &amp; benchmarks</a></li>
       <li><a href="#reading">05 · Key reading</a></li>
       <li><a href="#adjacent">06 · Beyond DNA</a></li>
+      <li><a href="concepts.html" style="font-weight:600;color:var(--ink)">Key concepts →</a></li>
     </ul>
   </div>
 </nav>
@@ -252,13 +164,13 @@
 
   <!-- ── 00 TUTORIAL & SETUP ── -->
   <section id="start">
-    <div class="sec-head"><span class="sec-num">00</span><h2>The tutorial &amp; setup</h2></div>
+    <h2><span class="sec-num">00</span>The tutorial &amp; setup</h2>
     <p class="sec-sub">The heart of the workshop is a single hands-on notebook in two parts. You'll run it on a free Colab/Kaggle GPU — no local install or cluster needed.</p>
 
     <div class="tutorial">
-      <p class="tt">Run-it-yourself notebook</p>
-      <h3>BDBio 2026 — LLMs in Genomics</h3>
-      <p>From loading a tiny DNA language model to fine-tuning a 500M-parameter foundation model on real regulatory-genomics tasks — start to finish on a free GPU.</p>
+      <p class="lbl">Run-it-yourself notebook</p>
+      <h3 style="font-size:1.15rem">BDBio 2026 — LLMs in Genomics</h3>
+      <p style="margin-top:2px;color:var(--text)">From loading a tiny DNA language model to fine-tuning a 500M-parameter foundation model on real regulatory-genomics tasks — start to finish on a free GPU.</p>
 
       <div class="tt-parts">
         <div class="tt-part">
@@ -267,8 +179,8 @@
           <ul>
             <li>Load a toy model (<code>Mistral-DNA-v1-17M</code>) and its tokenizer</li>
             <li>Compute sequence embeddings and count parameters</li>
-            <li>Score a real variant — a <em>CFTR</em> cystic-fibrosis mutation — by log-likelihood</li>
-            <li>Explore the hosted <code>Evo&nbsp;2-40B</code> and NVIDIA Protein Design interfaces</li>
+            <li>Score a real <em>CFTR</em> cystic-fibrosis mutation by log-likelihood</li>
+            <li>Explore the hosted <code>Evo 2-40B</code> and NVIDIA Protein Design interfaces</li>
           </ul>
         </div>
         <div class="tt-part">
@@ -283,254 +195,198 @@
         </div>
       </div>
 
-      <!-- EDIT ME #3 — paste your Colab / Kaggle "share" links + slides URL below.
-           The notebook itself ships in this repo (latest-bdbio-may30.ipynb). -->
+      <!-- EDIT ME #3 — add the Kaggle notebook + slides links. GitHub/download are wired. -->
       <div class="tt-btns">
-        <a href="#" target="_blank" rel="noopener">▶ Open in Colab</a>
-        <a href="#" target="_blank" rel="noopener">▶ Open in Kaggle</a>
-        <a class="ghost" href="latest-bdbio-may30.ipynb" target="_blank" rel="noopener">↓ Download notebook</a>
-        <a class="ghost" href="#" target="_blank" rel="noopener">View slides</a>
+        <a href="#">Open in Kaggle</a>
+        <a class="ghost" href="latest-bdbio-may30.ipynb">Download notebook</a>
+        <a class="ghost" href="https://github.com/shwetaramdas/genomicllms">View on GitHub</a>
+        <a class="ghost" href="#">View slides</a>
       </div>
     </div>
 
-    <p class="sec-sub" style="margin-bottom:14px">Setting up your own environment? This is the exact stack the notebook pins:</p>
+    <p class="sec-sub" style="margin-bottom:8px">Setting up your own environment? This is the exact stack the notebook pins:</p>
     <pre><span class="c"># versions pinned in the notebook for reproducibility</span>
-pip install <span class="k">transformers==4.41.0 peft==0.10.0 datasets accelerate</span>
-pip install <span class="k">biopython huggingface_hub</span>
+pip install transformers==4.41.0 peft==0.10.0 datasets accelerate
+pip install biopython huggingface_hub
 
 <span class="c"># Part 1 — load the toy DNA language model</span>
 from transformers import AutoTokenizer, AutoModel
-tok = AutoTokenizer.from_pretrained(<span class="k">"RaphaelMourad/Mistral-DNA-v1-17M-hg38"</span>, trust_remote_code=True)
-mdl = AutoModel.from_pretrained(<span class="k">"RaphaelMourad/Mistral-DNA-v1-17M-hg38"</span>, trust_remote_code=True)</pre>
+tok = AutoTokenizer.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_remote_code=True)
+mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_remote_code=True)</pre>
   </section>
 
   <!-- ── 01 FOUNDATION MODELS ── -->
   <section id="foundation">
-    <div class="sec-head"><span class="sec-num">01</span><h2>Foundation models</h2></div>
-    <p class="sec-sub">The large "sequence-to-function" and generative models. These are mostly <em>used</em> via API or inference rather than trained from scratch — but they define the frontier and are the reference points for everything else.</p>
-
-    <div class="grid">
-      <article class="card flag">
+    <h2><span class="sec-num">01</span>Foundation models</h2>
+    <p class="sec-sub">The large "sequence-to-function" and generative models. Mostly <em>used</em> via API or inference rather than trained from scratch, but they define the frontier.</p>
+    <div class="res">
+      <div class="res-item">
         <span class="tag">DeepMind · sequence→function</span>
         <h3>AlphaGenome</h3>
-        <p>Takes up to 1&nbsp;Mb of DNA and predicts thousands of regulatory tracks (expression, accessibility, splicing, TF binding, contact maps) at base resolution, and scores variant effects. Published in <em>Nature</em> (Jan 2026); free non-commercial API, source now open.</p>
-        <div class="links">
-          <a href="https://deepmind.google/science/alphagenome/" target="_blank" rel="noopener">Overview</a>
-          <a href="https://github.com/google-deepmind/alphagenome" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.nature.com/articles/s41586-025-10014-0" target="_blank" rel="noopener">Nature paper</a>
-        </div>
-      </article>
-
-      <article class="card flag">
+        <p>Takes up to 1&nbsp;Mb of DNA and predicts thousands of regulatory tracks (expression, accessibility, splicing, TF binding) at base resolution, and scores variant effects. Published in <em>Nature</em> (Jan 2026); free non-commercial API, source now open.</p>
+        <p class="links"><a href="https://deepmind.google/science/alphagenome/">Overview</a> · <a href="https://github.com/google-deepmind/alphagenome">GitHub</a> · <a href="https://www.nature.com/articles/s41586-025-10014-0">Nature</a></p>
+      </div>
+      <div class="res-item">
         <span class="tag">Arc Institute · generative</span>
-        <h3>Evo 2 <span class="used">tutorial</span></h3>
+        <h3>Evo 2 <span class="badge">tutorial</span></h3>
         <p>A 40B-parameter DNA/RNA/protein model with a 1&nbsp;Mb context (StripedHyena&nbsp;2), trained on 9.3T nucleotides across &gt;128k species. Generalist prediction <em>and</em> design; published in <em>Nature</em> (Mar 2026); fully open via Arc &amp; NVIDIA BioNeMo.</p>
-        <div class="links">
-          <a href="https://arcinstitute.org/tools/evo" target="_blank" rel="noopener">Project</a>
-          <a href="https://github.com/ArcInstitute/evo2" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://arcinstitute.org/tools/evo/evo-designer" target="_blank" rel="noopener">Evo Designer</a>
-        </div>
-      </article>
-
-      <article class="card">
+        <p class="links"><a href="https://arcinstitute.org/tools/evo">Project</a> · <a href="https://github.com/ArcInstitute/evo2">GitHub</a> · <a href="https://arcinstitute.org/tools/evo/evo-designer">Evo Designer</a></p>
+      </div>
+      <div class="res-item">
         <span class="tag">DeepMind · regulatory</span>
         <h3>Enformer</h3>
-        <p>The influential predecessor: a transformer predicting gene expression and chromatin from ~200&nbsp;kb of sequence. Still a clean, well-documented entry point for "DNA&nbsp;→&nbsp;function" intuition.</p>
-        <div class="links">
-          <a href="https://huggingface.co/EleutherAI/enformer-official-rough" target="_blank" rel="noopener">HF model</a>
-          <a href="https://www.nature.com/articles/s41592-021-01252-x" target="_blank" rel="noopener">Paper</a>
-        </div>
-      </article>
-
-      <article class="card">
+        <p>The influential predecessor: a transformer predicting gene expression and chromatin from ~200&nbsp;kb of sequence. A clean entry point for "DNA&nbsp;→&nbsp;function" intuition.</p>
+        <p class="links"><a href="https://huggingface.co/EleutherAI/enformer-official-rough">HF model</a> · <a href="https://www.nature.com/articles/s41592-021-01252-x">Paper</a></p>
+      </div>
+      <div class="res-item">
         <span class="tag">Calico · regulatory</span>
         <h3>Borzoi</h3>
         <p>Predicts RNA-seq coverage directly from sequence — a strong open successor to Enformer and one of AlphaGenome's main external baselines.</p>
-        <div class="links">
-          <a href="https://github.com/calico/borzoi" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.nature.com/articles/s41588-024-02053-6" target="_blank" rel="noopener">Paper</a>
-        </div>
-      </article>
+        <p class="links"><a href="https://github.com/calico/borzoi">GitHub</a> · <a href="https://www.nature.com/articles/s41588-024-02053-6">Paper</a></p>
+      </div>
     </div>
   </section>
 
   <!-- ── 02 FINE-TUNABLE DNA LMs ── -->
   <section id="dnalm">
-    <div class="sec-head"><span class="sec-num">02</span><h2>DNA language models you can fine-tune</h2></div>
-    <p class="sec-sub">These are the workhorses for a workshop: small-to-medium models that load on a free GPU and fine-tune in minutes-to-hours with <code>LoRA</code>/PEFT. All are on the Hugging Face Hub.</p>
-
-    <table class="tbl">
-      <thead>
-        <tr><th>Model</th><th>What it is</th><th>Hub / code</th></tr>
-      </thead>
+    <h2><span class="sec-num">02</span>DNA language models you can fine-tune</h2>
+    <p class="sec-sub">Small-to-medium models that load on a free GPU and fine-tune in minutes-to-hours with <code>LoRA</code>/PEFT. All are on the Hugging Face Hub.</p>
+    <table>
+      <thead><tr><th>Model</th><th>What it is</th><th>Hub / code</th></tr></thead>
       <tbody>
         <tr>
-          <td>Nucleotide&nbsp;Transformer <span class="used">tutorial</span></td>
-          <td>InstaDeep's family of BERT-style genomic models (multispecies, up to 2.5B). Strong baseline across 18 downstream tasks; fine-tuned with PEFT/LoRA.</td>
-          <td class="mono"><a href="https://huggingface.co/InstaDeepAI" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/instadeepai/nucleotide-transformer" target="_blank" rel="noopener">code</a> · <a href="https://huggingface.co/spaces/InstaDeepAI/nucleotide_transformer_benchmark" target="_blank" rel="noopener">leaderboard</a></td>
+          <td>Nucleotide Transformer <span class="badge">tutorial</span></td>
+          <td>InstaDeep's BERT-style genomic models (up to 2.5B). Strong baseline across 18 tasks; fine-tuned with PEFT/LoRA.</td>
+          <td class="mono"><a href="https://huggingface.co/InstaDeepAI">HF</a> · <a href="https://github.com/instadeepai/nucleotide-transformer">code</a> · <a href="https://huggingface.co/spaces/InstaDeepAI/nucleotide_transformer_benchmark">leaderboard</a></td>
         </tr>
         <tr>
           <td>DNABERT-2</td>
-          <td>Efficient multi-species BERT with byte-pair tokenisation (<code>zhihan1996/DNABERT-2-117M</code>). Ships the GUE benchmark suite. Great teaching default.</td>
-          <td class="mono"><a href="https://huggingface.co/zhihan1996/DNABERT-2-117M" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/MAGICS-LAB/DNABERT_2" target="_blank" rel="noopener">code</a> · <a href="https://arxiv.org/abs/2306.15006" target="_blank" rel="noopener">paper</a></td>
+          <td>Efficient multi-species BERT with byte-pair tokenisation. Ships the GUE benchmark suite. A solid teaching default.</td>
+          <td class="mono"><a href="https://huggingface.co/zhihan1996/DNABERT-2-117M">HF</a> · <a href="https://github.com/MAGICS-LAB/DNABERT_2">code</a> · <a href="https://arxiv.org/abs/2306.15006">paper</a></td>
         </tr>
         <tr>
           <td>HyenaDNA</td>
-          <td>Convolution-based long-context model (up to ~1M tokens, single-nucleotide). Useful to contrast attention vs. sub-quadratic architectures.</td>
-          <td class="mono"><a href="https://huggingface.co/LongSafari" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/HazyResearch/hyena-dna" target="_blank" rel="noopener">code</a> · <a href="https://arxiv.org/abs/2306.15794" target="_blank" rel="noopener">paper</a></td>
+          <td>Convolution-based long-context model (single-nucleotide, up to ~1M tokens). Good contrast to attention.</td>
+          <td class="mono"><a href="https://huggingface.co/LongSafari">HF</a> · <a href="https://github.com/HazyResearch/hyena-dna">code</a> · <a href="https://arxiv.org/abs/2306.15794">paper</a></td>
         </tr>
         <tr>
-          <td>Mistral-DNA <span class="used">tutorial</span></td>
-          <td>Mistral/Mixtral architecture adapted to DNA, in several small sizes (17M–422M) and organisms. Repo includes ready-to-run fine-tuning notebooks — handy for a workshop.</td>
-          <td class="mono"><a href="https://huggingface.co/RaphaelMourad" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/raphaelmourad/Mistral-DNA" target="_blank" rel="noopener">code</a></td>
+          <td>Mistral-DNA <span class="badge">tutorial</span></td>
+          <td>Mistral/Mixtral adapted to DNA, sizes 17M–422M. Repo includes ready-to-run fine-tuning notebooks.</td>
+          <td class="mono"><a href="https://huggingface.co/RaphaelMourad">HF</a> · <a href="https://github.com/raphaelmourad/Mistral-DNA">code</a></td>
         </tr>
         <tr>
           <td>Caduceus</td>
-          <td>State-space (Mamba-based) bi-directional, reverse-complement-equivariant DNA model — a modern non-transformer alternative.</td>
-          <td class="mono"><a href="https://huggingface.co/kuleshov-group" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/kuleshov-group/caduceus" target="_blank" rel="noopener">code</a></td>
+          <td>State-space (Mamba) bi-directional, reverse-complement-equivariant DNA model.</td>
+          <td class="mono"><a href="https://huggingface.co/kuleshov-group">HF</a> · <a href="https://github.com/kuleshov-group/caduceus">code</a></td>
         </tr>
         <tr>
           <td>GENA-LM</td>
-          <td>Family of long-context BERT-style human genomic models from AIRI, with several tokenisation choices.</td>
-          <td class="mono"><a href="https://huggingface.co/AIRI-Institute" target="_blank" rel="noopener">HF</a> · <a href="https://github.com/AIRI-Institute/GENA_LM" target="_blank" rel="noopener">code</a></td>
+          <td>Long-context BERT-style human genomic models from AIRI.</td>
+          <td class="mono"><a href="https://huggingface.co/AIRI-Institute">HF</a> · <a href="https://github.com/AIRI-Institute/GENA_LM">code</a></td>
         </tr>
       </tbody>
     </table>
-    <div class="callout"><b>Tip for the live session:</b> pick <em>one</em> model + <em>one</em> binary task (e.g. promoter vs. non-promoter, or an epigenetic-mark dataset from GUE) and run the whole load → tokenise → LoRA → evaluate loop end-to-end. Swapping in a second model afterwards makes the "foundation model" idea concrete.</div>
+    <p class="note">Tip for the live session: pick <em>one</em> model + <em>one</em> binary task and run the whole load → tokenise → LoRA → evaluate loop end-to-end — exactly what Part 2 of the tutorial does.</p>
   </section>
 
   <!-- ── 03 HANDS-ON ── -->
   <section id="handson">
-    <div class="sec-head"><span class="sec-num">03</span><h2>Hands-on &amp; fine-tuning</h2></div>
+    <h2><span class="sec-num">03</span>Hands-on &amp; fine-tuning</h2>
     <p class="sec-sub">The practical toolkit. If students learn one thing technically, it should be parameter-efficient fine-tuning (LoRA) with the Hugging Face <code>Trainer</code>.</p>
-    <div class="grid">
-      <article class="card">
-        <span class="tag">Library</span>
-        <h3>🤗 PEFT (LoRA)</h3>
+    <div class="res">
+      <div class="res-item">
+        <span class="tag">Library</span><h3>PEFT (LoRA)</h3>
         <p>Low-rank adaptation: freeze the base model, train tiny adapter matrices. This is what makes fine-tuning a genomic LM feasible on a free GPU.</p>
-        <div class="links">
-          <a href="https://huggingface.co/docs/peft" target="_blank" rel="noopener">Docs</a>
-          <a href="https://github.com/huggingface/peft" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">LoRA paper</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">Course · free</span>
-        <h3>HF LLM / NLP Course</h3>
+        <p class="links"><a href="https://huggingface.co/docs/peft">Docs</a> · <a href="https://github.com/huggingface/peft">GitHub</a> · <a href="https://arxiv.org/abs/2106.09685">LoRA paper</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Course · free</span><h3>Hugging Face LLM / NLP Course</h3>
         <p>The clearest free introduction to tokenisers, the <code>Trainer</code> API, datasets and fine-tuning. The mechanics transfer directly to DNA models.</p>
-        <div class="links"><a href="https://huggingface.co/learn/llm-course" target="_blank" rel="noopener">huggingface.co/learn</a></div>
-      </article>
-      <article class="card">
-        <span class="tag">Course · audit free</span>
-        <h3>Generative AI with LLMs</h3>
+        <p class="links"><a href="https://huggingface.co/learn/llm-course">huggingface.co/learn</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Course · audit free</span><h3>Generative AI with LLMs</h3>
         <p>DeepLearning.AI &amp; AWS course on how LLMs actually work — transformer internals, prompting, fine-tuning, PEFT/LoRA and RLHF. A solid conceptual backbone for the genomics tutorial.</p>
-        <div class="links"><a href="https://www.coursera.org/learn/generative-ai-with-llms/home/welcome" target="_blank" rel="noopener">Coursera</a></div>
-      </article>
-      <article class="card">
-        <span class="tag">Library</span>
-        <h3>🤗 Transformers + Datasets</h3>
-        <p>The backbone: <code>AutoModel</code>, <code>AutoTokenizer</code>, and streaming/efficient data loading for sequence data.</p>
-        <div class="links">
-          <a href="https://huggingface.co/docs/transformers" target="_blank" rel="noopener">Transformers</a>
-          <a href="https://huggingface.co/docs/datasets" target="_blank" rel="noopener">Datasets</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">Compute · free GPU</span>
-        <h3>Colab &amp; Kaggle</h3>
-        <p>Free T4 GPUs, no setup. Kaggle also gives weekly GPU quota and easy dataset hosting — ideal for distributing a workshop notebook.</p>
-        <div class="links">
-          <a href="https://colab.research.google.com" target="_blank" rel="noopener">Colab</a>
-          <a href="https://www.kaggle.com/code" target="_blank" rel="noopener">Kaggle</a>
-        </div>
-      </article>
+        <p class="links"><a href="https://www.coursera.org/learn/generative-ai-with-llms/home/welcome">Coursera</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Library</span><h3>Transformers + Datasets</h3>
+        <p>The backbone: <code>AutoModel</code>, <code>AutoTokenizer</code>, and efficient data loading for sequence data.</p>
+        <p class="links"><a href="https://huggingface.co/docs/transformers">Transformers</a> · <a href="https://huggingface.co/docs/datasets">Datasets</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Compute · free GPU</span><h3>Kaggle &amp; Colab</h3>
+        <p>Free T4 GPUs, no setup. The workshop notebook runs on Kaggle, which also gives weekly GPU quota and easy dataset hosting; Colab is an equivalent alternative.</p>
+        <p class="links"><a href="https://www.kaggle.com/code">Kaggle</a> · <a href="https://colab.research.google.com">Colab</a></p>
+      </div>
     </div>
   </section>
 
   <!-- ── 04 DATA & BENCHMARKS ── -->
   <section id="data">
-    <div class="sec-head"><span class="sec-num">04</span><h2>Datasets &amp; benchmarks</h2></div>
+    <h2><span class="sec-num">04</span>Datasets &amp; benchmarks</h2>
     <p class="sec-sub">Ready-made labelled tasks so students can fine-tune and compare without wrangling raw genomes.</p>
-    <div class="grid">
-      <article class="card">
-        <span class="tag">Benchmark</span>
-        <h3>Genomic Benchmarks</h3>
+    <div class="res">
+      <div class="res-item">
+        <span class="tag">Benchmark</span><h3>Genomic Benchmarks</h3>
         <p>A clean collection of binary/multiclass classification datasets (promoters, enhancers, regulatory elements) packaged for quick fine-tuning.</p>
-        <div class="links"><a href="https://github.com/ML-Bioinfo-CEITEC/genomic_benchmarks" target="_blank" rel="noopener">GitHub</a></div>
-      </article>
-      <article class="card">
-        <span class="tag">Benchmark</span>
-        <h3>GUE</h3>
-        <p>Genome Understanding Evaluation — 28 datasets across 7 tasks, bundled with the DNABERT-2 repo. The standard yardstick for DNA LMs.</p>
-        <div class="links"><a href="https://github.com/MAGICS-LAB/DNABERT_2" target="_blank" rel="noopener">via DNABERT-2</a></div>
-      </article>
-      <article class="card">
-        <span class="tag">Leaderboard</span>
-        <h3>NT Benchmark</h3>
+        <p class="links"><a href="https://github.com/ML-Bioinfo-CEITEC/genomic_benchmarks">GitHub</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Benchmark</span><h3>GUE</h3>
+        <p>Genome Understanding Evaluation — 28 datasets across 7 tasks, bundled with the DNABERT-2 repo. A standard yardstick for DNA LMs.</p>
+        <p class="links"><a href="https://github.com/MAGICS-LAB/DNABERT_2">via DNABERT-2</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Leaderboard</span><h3>NT Benchmark</h3>
         <p>Interactive leaderboard comparing NT, DNABERT-2, HyenaDNA and Enformer across 18 downstream tasks — useful for choosing a model.</p>
-        <div class="links"><a href="https://huggingface.co/spaces/InstaDeepAI/nucleotide_transformer_benchmark" target="_blank" rel="noopener">HF Space</a></div>
-      </article>
-      <article class="card">
-        <span class="tag">Reference data</span>
-        <h3>Ensembl · UCSC · NCBI</h3>
+        <p class="links"><a href="https://huggingface.co/spaces/InstaDeepAI/nucleotide_transformer_benchmark">HF Space</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Reference data</span><h3>Ensembl · UCSC · NCBI</h3>
         <p>Where raw sequence, annotations and variants come from when you build your own task.</p>
-        <div class="links">
-          <a href="https://www.ensembl.org" target="_blank" rel="noopener">Ensembl</a>
-          <a href="https://genome.ucsc.edu" target="_blank" rel="noopener">UCSC</a>
-          <a href="https://www.ncbi.nlm.nih.gov" target="_blank" rel="noopener">NCBI</a>
-        </div>
-      </article>
+        <p class="links"><a href="https://www.ensembl.org">Ensembl</a> · <a href="https://genome.ucsc.edu">UCSC</a> · <a href="https://www.ncbi.nlm.nih.gov">NCBI</a></p>
+      </div>
     </div>
   </section>
 
   <!-- ── 05 KEY READING ── -->
   <section id="reading">
-    <div class="sec-head"><span class="sec-num">05</span><h2>Key reading</h2></div>
-    <p class="sec-sub">A short, high-signal reading path — from the architecture that started it all to the current genomic frontier.</p>
-    <table class="tbl">
+    <h2><span class="sec-num">05</span>Key reading</h2>
+    <p class="sec-sub">A short, high-signal reading path — from the architecture that started it all to the current frontier and an honest review of the field.</p>
+    <table>
       <tbody>
-        <tr><td>Attention Is All You Need</td><td>The transformer. Worth reading once even for genomics.</td><td class="mono"><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">arXiv</a></td></tr>
-        <tr><td>DNABERT-2</td><td>Efficient multi-species genomic LM + the GUE benchmark.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15006" target="_blank" rel="noopener">arXiv</a></td></tr>
-        <tr><td>Nucleotide Transformer</td><td>Robust foundation models for human genomics (<em>Nat. Methods</em>).</td><td class="mono"><a href="https://www.nature.com/articles/s41592-024-02523-z" target="_blank" rel="noopener">Nature</a></td></tr>
-        <tr><td>HyenaDNA</td><td>Long-range genomic modelling at single-nucleotide resolution.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15794" target="_blank" rel="noopener">arXiv</a></td></tr>
-        <tr><td>Evo 2</td><td>Genome modelling &amp; design across all domains of life.</td><td class="mono"><a href="https://arcinstitute.org/news/evo2" target="_blank" rel="noopener">Arc</a></td></tr>
-        <tr><td>AlphaGenome</td><td>Unified regulatory variant-effect prediction (<em>Nature</em> 2026).</td><td class="mono"><a href="https://www.nature.com/articles/s41586-025-10014-0" target="_blank" rel="noopener">Nature</a></td></tr>
+        <tr><td>Genomic LMs: opportunities &amp; challenges</td><td>The best single survey — Benegas et al., <em>Trends in Genetics</em> 2025. Read this first.</td><td class="mono"><a href="https://arxiv.org/abs/2407.11435">arXiv</a></td></tr>
+        <tr><td>Attention Is All You Need</td><td>The transformer. Worth reading once even for genomics.</td><td class="mono"><a href="https://arxiv.org/abs/1706.03762">arXiv</a></td></tr>
+        <tr><td>DNABERT-2</td><td>Efficient multi-species genomic LM + the GUE benchmark.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15006">arXiv</a></td></tr>
+        <tr><td>Nucleotide Transformer</td><td>Robust foundation models for human genomics (<em>Nat. Methods</em>).</td><td class="mono"><a href="https://www.nature.com/articles/s41592-024-02523-z">Nature</a></td></tr>
+        <tr><td>HyenaDNA</td><td>Long-range genomic modelling at single-nucleotide resolution.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15794">arXiv</a></td></tr>
+        <tr><td>Evo 2</td><td>Genome modelling &amp; design across all domains of life.</td><td class="mono"><a href="https://arcinstitute.org/news/evo2">Arc</a></td></tr>
+        <tr><td>AlphaGenome</td><td>Unified regulatory variant-effect prediction (<em>Nature</em> 2026).</td><td class="mono"><a href="https://www.nature.com/articles/s41586-025-10014-0">Nature</a></td></tr>
       </tbody>
     </table>
   </section>
 
   <!-- ── 06 BEYOND DNA ── -->
   <section id="adjacent">
-    <div class="sec-head"><span class="sec-num">06</span><h2>Beyond DNA</h2></div>
+    <h2><span class="sec-num">06</span>Beyond DNA</h2>
     <p class="sec-sub">If the workshop strays toward proteins or single-cell data, these are the canonical foundation models.</p>
-    <div class="grid">
-      <article class="card">
-        <span class="tag">Protein</span>
-        <h3>ESM-2 / ESM-3</h3>
+    <div class="res">
+      <div class="res-item">
+        <span class="tag">Protein</span><h3>ESM-2 / ESM-3</h3>
         <p>Protein language models from Meta / EvolutionaryScale — embeddings, structure prediction and design.</p>
-        <div class="links">
-          <a href="https://github.com/facebookresearch/esm" target="_blank" rel="noopener">ESM-2</a>
-          <a href="https://github.com/evolutionaryscale/esm" target="_blank" rel="noopener">ESM-3</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">Protein structure</span>
-        <h3>AlphaFold</h3>
+        <p class="links"><a href="https://github.com/facebookresearch/esm">ESM-2</a> · <a href="https://github.com/evolutionaryscale/esm">ESM-3</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Protein structure</span><h3>AlphaFold</h3>
         <p>The structure-prediction model that reframed the field. Database + open code.</p>
-        <div class="links">
-          <a href="https://alphafold.ebi.ac.uk" target="_blank" rel="noopener">DB</a>
-          <a href="https://github.com/google-deepmind/alphafold" target="_blank" rel="noopener">Code</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">Single-cell</span>
-        <h3>Geneformer / scGPT</h3>
+        <p class="links"><a href="https://alphafold.ebi.ac.uk">DB</a> · <a href="https://github.com/google-deepmind/alphafold">Code</a></p>
+      </div>
+      <div class="res-item">
+        <span class="tag">Single-cell</span><h3>Geneformer / scGPT</h3>
         <p>Transformer foundation models for single-cell transcriptomics — cell-type annotation, perturbation, gene networks.</p>
-        <div class="links">
-          <a href="https://huggingface.co/ctheodoris/Geneformer" target="_blank" rel="noopener">Geneformer</a>
-          <a href="https://github.com/bowang-lab/scGPT" target="_blank" rel="noopener">scGPT</a>
-        </div>
-      </article>
+        <p class="links"><a href="https://huggingface.co/ctheodoris/Geneformer">Geneformer</a> · <a href="https://github.com/bowang-lab/scGPT">scGPT</a></p>
+      </div>
     </div>
   </section>
 
@@ -538,21 +394,10 @@ mdl = AutoModel.from_pretrained(<span class="k">"RaphaelMourad/Mistral-DNA-v1-17
 
 <footer>
   <div class="wrap">
-    <div>
-      <p class="sig">Questions, fixes, or a resource I missed?</p>
-      <!-- EDIT ME #4 — contact + repo links -->
-      <p style="margin-top:8px">Reach out at <a href="mailto:[ your-email ]">[ your-email ]</a> · suggest edits on the <a href="#">repository</a>.</p>
-    </div>
-    <p>Built for an educational workshop. All linked tools belong to their respective authors; check each model's licence before use. Last reviewed: [ month / year ].</p>
+    <!-- EDIT ME #4 — contact + last-reviewed date -->
+    <p>Questions, fixes, or a resource missing? Reach out at <a href="mailto:[ your-email ]">[ your-email ]</a> or open an issue on the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>. All linked tools belong to their respective authors — check each model's licence before use. Last reviewed: [ month / year ].</p>
   </div>
 </footer>
 
-<script>
-  // staggered reveal for sections on scroll
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('fade'); io.unobserve(e.target);} });
-  },{threshold:.08});
-  document.querySelectorAll('section').forEach(s=>io.observe(s));
-</script>
 </body>
 </html>

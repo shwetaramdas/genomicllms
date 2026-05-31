@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Key Concepts · LLMs in Genomics</title>
+<meta name="description" content="A plain-language primer on the key ideas behind large language models in genomics: tokenization, embeddings, fine-tuning, LoRA, quantization, variant scoring and evaluation." />
+<style>
+  :root{
+    --ink:#1a1a1a;--text:#3f3f3f;--muted:#6b6b6b;--line:#e2e2e2;--bg:#ffffff;--code-bg:#f6f6f6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.65;font-size:17px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;
+    text-decoration-thickness:1px;text-decoration-color:#bbb;transition:.15s}
+  a:hover{text-decoration-color:var(--ink)}
+  h1{font-size:2.1rem;font-weight:700;color:var(--ink);line-height:1.15;letter-spacing:-.01em;margin-bottom:8px}
+  h2{font-size:1.3rem;font-weight:700;color:var(--ink);padding-top:18px;
+    border-top:1px solid var(--line);margin-bottom:6px}
+  h2 .n{color:var(--muted);font-size:.85rem;font-weight:600;margin-right:8px}
+  p{margin:10px 0;max-width:64ch}
+  .eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .lede{font-size:1.08rem;max-width:60ch}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none;display:inline-block;margin-bottom:18px}
+  .back:hover{color:var(--ink)}
+  header.hero{padding:46px 0 26px}
+  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.86em;
+    background:var(--code-bg);padding:1px 5px;border-radius:4px;color:var(--ink)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:14px 16px;
+    overflow-x:auto;margin:10px 0;font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:.8rem;line-height:1.7;color:#2a2a2a}
+  pre .c{color:#999}
+  section{padding:22px 0 4px}
+  .tldr{font-size:.92rem;color:var(--ink);background:var(--code-bg);border-radius:6px;
+    padding:10px 14px;margin:10px 0;max-width:64ch}
+  .tldr b{font-weight:600}
+  .tie{font-size:.9rem;color:var(--muted);border-left:2px solid var(--line);
+    padding:3px 0 3px 13px;margin:12px 0;max-width:64ch}
+  .tie b{color:var(--text);font-weight:600}
+  /* concept index */
+  .toc{border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin:22px 0 8px}
+  .toc p{margin:0 0 8px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .toc ol{margin:0;padding-left:1.2em;columns:2;column-gap:30px;font-size:.92rem}
+  .toc li{margin:3px 0;break-inside:avoid}
+  .toc a{text-decoration:none;color:var(--text)}
+  .toc a:hover{color:var(--ink);text-decoration:underline}
+  footer{margin-top:40px;border-top:1px solid var(--line);padding:24px 0 50px}
+  footer p{font-size:.85rem;color:var(--muted)}
+  @media(max-width:560px){h1{font-size:1.75rem}.toc ol{columns:1}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to resources</a>
+    <p class="eyebrow">LLMs in Genomics · Primer</p>
+    <h1>Key concepts</h1>
+    <p class="lede">A plain-language tour of the ideas behind genomic language models — enough to follow the tutorial, and to keep learning long after the workshop. Each entry is short; skim the ones you need.</p>
+
+    <nav class="toc">
+      <p>On this page</p>
+      <ol>
+        <li><a href="#foundation">Foundation models &amp; pretraining</a></li>
+        <li><a href="#token">Tokenization (DNA → tokens)</a></li>
+        <li><a href="#embed">Embeddings</a></li>
+        <li><a href="#encdec">Encoders vs decoders</a></li>
+        <li><a href="#internals">Inside a transformer (heads &amp; layers)</a></li>
+        <li><a href="#context">Attention &amp; long context</a></li>
+        <li><a href="#transfer">Transfer learning &amp; fine-tuning</a></li>
+        <li><a href="#lora">PEFT &amp; LoRA</a></li>
+        <li><a href="#quant">Quantization (&amp; QLoRA)</a></li>
+        <li><a href="#variant">Zero-shot variant scoring</a></li>
+        <li><a href="#eval">Evaluation metrics</a></li>
+        <li><a href="#caveat">Is DNA really a "language"?</a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="foundation">
+    <h2><span class="n">01</span>Foundation models &amp; pretraining</h2>
+    <p>A <b>foundation model</b> is a large neural network trained once, on a huge amount of unlabeled data, in a way that it can later be adapted to many specific tasks. The training trick is <b>self-supervised learning</b>: instead of hand-labeled examples, the model is given a task it can grade itself on — e.g. "predict the hidden part of this input." For DNA, the data is reference genomes and the model learns the statistical regularities of sequence: motifs, codon structure, local "grammar."</p>
+    <p>The payoff is <b>transfer</b>: the general patterns learned during pretraining give you a strong starting point for narrow tasks (promoter detection, variant scoring) with far less labeled data than training from scratch.</p>
+    <div class="tldr"><b>In one line:</b> pretrain once on raw genomes, reuse everywhere.</div>
+  </section>
+
+  <section id="token">
+    <h2><span class="n">02</span>Tokenization — turning ACGT into tokens</h2>
+    <p>A model can't read raw letters; it reads <b>tokens</b> (integers). How you chop DNA into tokens is a real design choice, trading off sequence length against vocabulary size. Three common schemes:</p>
+    <p><b>Single-nucleotide</b> — one token per base. Maximum resolution, but the longest sequences. Used by HyenaDNA and Evo.<br>
+    <b>k-mer</b> — fixed windows of <code>k</code> bases. DNABERT-1 used <em>overlapping</em> 6-mers; Nucleotide Transformer uses <em>non-overlapping</em> 6-mers. Overlapping k-mers leak information between adjacent tokens and are now generally avoided.<br>
+    <b>Byte-pair encoding (BPE)</b> — learns frequent sub-sequences as tokens, compressing length. Used by DNABERT-2 and Mistral-DNA.</p>
+    <div class="tie"><b>In the tutorial:</b> when you call <code>AutoTokenizer.from_pretrained(...)</code>, this is the step turning your DNA string into the integers the model actually sees.</div>
+  </section>
+
+  <section id="embed">
+    <h2><span class="n">03</span>Embeddings</h2>
+    <p>An <b>embedding</b> is the model's internal numerical summary of a sequence — a vector of a few hundred or thousand numbers that places "similar" sequences near each other in space. You can pull embeddings out of a frozen model and feed them to a simple classifier, cluster them, or visualize them. They're the cheapest way to put a foundation model to work.</p>
+    <div class="tie"><b>In the tutorial:</b> Part 1 computes an embedding for a DNA sequence straight from <code>Mistral-DNA</code>, with no training at all.</div>
+  </section>
+
+  <section id="encdec">
+    <h2><span class="n">04</span>Encoders vs decoders</h2>
+    <p>Two architecture families dominate, distinguished by what they're trained to predict:</p>
+    <p><b>Encoders (BERT-style).</b> Trained by <b>masked language modeling</b> — hide some tokens, predict them from <em>both</em> sides. Bidirectional context makes them excellent for embeddings and classification. → Nucleotide Transformer, DNABERT, GENA-LM.</p>
+    <p><b>Decoders (GPT-style).</b> Trained by <b>next-token prediction</b> — predict the following base from everything before it. This enables generation and likelihood scoring. → Mistral-DNA, Evo.</p>
+    <p>A related third family isn't a "language model" at all: <b>supervised sequence-to-function</b> models (Enformer, Borzoi, AlphaGenome) trained directly on experimental measurements like expression or accessibility. Different objective, different use.</p>
+  </section>
+
+  <section id="internals">
+    <h2><span class="n">05</span>Inside a transformer: attention heads &amp; layers</h2>
+    <p>A transformer turns a sequence of token embeddings into a richer, context-aware representation by stacking the same building block many times. Inside one block:</p>
+    <p><b>Self-attention.</b> Each token produces three vectors — a <em>query</em>, a <em>key</em>, and a <em>value</em>. A token's query is compared against every other token's key to decide "how much should I pay attention to you?", and the token's new representation becomes a weighted blend of all the value vectors. This is how each position pulls in context from the rest of the sequence.</p>
+    <p><b>Attention heads.</b> Rather than do this once, a transformer runs several attention operations in parallel — the <b>heads</b>. Each head has its own query/key/value projections, so different heads can specialise: one might track immediate neighbours, another a recurring motif, another a long-range partner. Their outputs are concatenated and mixed. This is <b>multi-head attention</b>, and the number of heads (e.g. 12) is one of the model's core size knobs.</p>
+    <p><b>Feed-forward, residuals, normalisation.</b> After attention, each token passes through a small feed-forward network. <b>Residual connections</b> (adding the block's input back to its output) and <b>layer normalisation</b> keep training stable as blocks stack.</p>
+    <p><b>Depth &amp; parameters.</b> Stacking many such blocks — the model's <b>layers</b> — lets representations grow progressively more abstract. The "parameter count" people quote (117M, 500M, 40B) is mostly the weights in the attention and feed-forward matrices across all those layers. For DNA the inputs are nucleotide or k-mer tokens rather than words, but the machinery is identical — which is exactly why the NLP toolkit transfers.</p>
+    <div class="tie"><b>In genomics:</b> interpretability work reads individual heads and features to see what a model attends to — for instance, heads that align to exon–intron boundaries.</div>
+    <p class="tldr"><b>Best visual explainer:</b> Jay Alammar, <a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a>.</p>
+  </section>
+
+  <section id="context">
+    <h2><span class="n">06</span>Attention &amp; the long-context problem</h2>
+    <p>That all-to-all attention is powerful, but its cost grows with the <em>square</em> of sequence length. Biology is stubbornly long-range: an enhancer can regulate a gene 100,000 bases away. So genomics has pushed architectures that scale better than plain attention:</p>
+    <p>implicit long convolutions (<b>Hyena</b> → HyenaDNA; <b>StripedHyena 2</b> → Evo 2), <b>state-space models</b> (<b>Mamba</b> → Caduceus), and dilated convolutions (Enformer). The <b>context window</b> — how many bases a model can see at once — is a first-class design decision here, not a footnote.</p>
+  </section>
+
+  <section id="transfer">
+    <h2><span class="n">07</span>Transfer learning &amp; fine-tuning</h2>
+    <p>Once you have a pretrained model, there are three ways to use it, in increasing order of cost:</p>
+    <p><b>Probing</b> — freeze the model, extract embeddings, train only a small classifier on top. Fast, cheap, a strong baseline.<br>
+    <b>Fine-tuning</b> — continue training the model's own weights on your labeled task. More accurate, more expensive, and prone to overfitting on small datasets.<br>
+    <b>Parameter-efficient fine-tuning</b> — a middle path (next section).</p>
+    <div class="tie"><b>In the tutorial:</b> Part 2 fine-tunes Nucleotide Transformer for promoter and enhancer classification.</div>
+  </section>
+
+  <section id="lora">
+    <h2><span class="n">08</span>PEFT &amp; LoRA</h2>
+    <p>Full fine-tuning updates every weight in the model — accurate but memory-hungry. <b>Parameter-efficient fine-tuning (PEFT)</b> freezes the original model and trains only a small set of new parameters bolted on top.</p>
+    <p><b>LoRA</b> (Low-Rank Adaptation) is the most common form. Instead of updating a big weight matrix <code>W</code> directly, it learns a small low-rank correction <code>ΔW = B·A</code>, where <code>A</code> and <code>B</code> are tiny (rank <code>r</code> much smaller than the matrix width). You train <code>A</code> and <code>B</code>, leave <code>W</code> frozen, and add them back at inference. This cuts trainable parameters by orders of magnitude — which is exactly what makes fine-tuning a 500M-parameter model feasible on a free GPU.</p>
+    <div class="tie"><b>In the tutorial:</b> Part 2 uses LoRA on <code>NT-500M</code> — only the adapters are trained, so it finishes in minutes on Kaggle.</div>
+  </section>
+
+  <section id="quant">
+    <h2><span class="n">09</span>Quantization (&amp; QLoRA)</h2>
+    <p>Model weights are normally stored as 32- or 16-bit floating-point numbers. <b>Quantization</b> stores them with fewer bits — typically 8-bit or 4-bit integers. The point is <b>memory</b>: a 7-billion-parameter model needs roughly 14&nbsp;GB in 16-bit but only about 3.5&nbsp;GB in 4-bit — often the difference between "won't load" and "fits on a free GPU." It can also speed up inference. The cost is a small, usually acceptable loss of precision; modern schemes (8-bit <code>LLM.int8()</code>, 4-bit <code>NF4</code>) are designed to keep that loss tiny.</p>
+    <p>In practice you turn it on when loading a model:</p>
+    <pre><span class="c"># load a model in 4-bit to fit a small GPU (needs bitsandbytes)</span>
+from transformers import AutoModel, BitsAndBytesConfig
+cfg = BitsAndBytesConfig(load_in_4bit=True)
+mdl = AutoModel.from_pretrained(name, quantization_config=cfg, trust_remote_code=True)</pre>
+    <p><b>QLoRA</b> combines the two ideas: keep the base model frozen in 4-bit, and train LoRA adapters on top of it. Because the frozen weights barely use memory, you can fine-tune models far larger than would otherwise fit on a single free GPU — the technique that put fine-tuning large models within reach of students and small labs.</p>
+    <div class="tie"><b>Why it matters here:</b> quantization is how you'd stretch a Kaggle GPU to load or fine-tune the <em>bigger</em> genomic models (e.g. larger Nucleotide Transformer checkpoints) rather than only the toy ones.</div>
+    <p class="tldr"><b>Reading:</b> <a href="https://huggingface.co/docs/transformers/quantization">Transformers quantization docs</a> · <a href="https://github.com/bitsandbytes-foundation/bitsandbytes">bitsandbytes</a> · <a href="https://arxiv.org/abs/2305.14314">QLoRA paper</a></p>
+  </section>
+
+  <section id="variant">
+    <h2><span class="n">10</span>Zero-shot variant scoring</h2>
+    <p>One of the most useful tricks needs <em>no</em> labels at all. A decoder model assigns a <b>likelihood</b> to any sequence — how "expected" it looks given everything the model learned. To judge a mutation, you score the reference sequence and the mutated sequence and compare: a variant that sharply lowers the likelihood is one the model finds "surprising," which often flags it as potentially disruptive.</p>
+    <div class="tie"><b>In the tutorial:</b> Part 1 does exactly this for a <em>CFTR</em> cystic-fibrosis mutation, using log-likelihood from the DNA model — no training, no labels.</div>
+  </section>
+
+  <section id="eval">
+    <h2><span class="n">11</span>Evaluation metrics</h2>
+    <p>How do you know a fine-tuned model is any good? It depends on the data:</p>
+    <p><b>Accuracy</b> — fraction correct. Misleading when classes are imbalanced.<br>
+    <b>F1</b> — balances precision and recall; better for skewed data.<br>
+    <b>AUROC</b> — how well the model ranks positives above negatives across all thresholds.<br>
+    <b>MCC</b> (Matthews correlation coefficient) — the most honest single number under heavy imbalance, because it accounts for all four cells of the confusion matrix at once.</p>
+    <div class="tie"><b>In the tutorial:</b> promoter prediction is scored with <b>F1</b>; the more imbalanced enhancer task uses <b>MCC</b>.</div>
+  </section>
+
+  <section id="caveat">
+    <h2><span class="n">12</span>Is DNA really a "language"?</h2>
+    <p>The analogy that powers all of this — treat DNA like text and reuse NLP — is productive but loose, and it's worth holding loosely. DNA has no clean word boundaries; its most important "rules" are biochemical and act over enormous distances; and a high model likelihood is not the same thing as a real biological function. There's active debate about how much genomic LMs truly add over well-tuned, task-specific models on some benchmarks, and about how much benchmark scores reflect genuine biological insight versus dataset artifacts.</p>
+    <p>None of that diminishes the tools — it just means treating them as powerful statistical priors over sequence, not oracles. For a careful, balanced overview, the survey below is the best starting point.</p>
+    <p class="tldr"><b>Read next:</b> Benegas et al., <a href="https://arxiv.org/abs/2407.11435">Genomic language models: opportunities and challenges</a> (<em>Trends in Genetics</em>, 2025).</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><a href="index.html">← Back to the resource hub</a> · This primer is a companion to the BDBio 2026 workshop and works as a standalone introduction. Tools and papers belong to their respective authors.</p>
+  </div>
+</footer>
+
+</body>
+</html>
