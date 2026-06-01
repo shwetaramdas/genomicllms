@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BDBio 2026 · LLMs in Genomics</title>
+<link rel="icon" href="data:,">
 <meta name="description" content="Resource hub for the BDBio 2026 pre-symposium workshop on large language models in genomics." />
 
 <!-- ════════════════════════════════════════════════════════════════
@@ -149,7 +150,7 @@
   <div class="wrap" style="padding:0">
     <ul>
       <li><a href="#start">00 · Tutorial &amp; setup</a></li>
-      <li><a href="#foundation">01 · Foundation models</a></li>
+      <li><a href="#foundation">01 · Foundation Models in genomics</a></li>
       <li><a href="#dnalm">02 · Fine-tunable DNA LMs</a></li>
       <li><a href="#handson">03 · Hands-on</a></li>
       <li><a href="#data">04 · Data &amp; benchmarks</a></li>
@@ -166,14 +167,13 @@
   <section id="start">
     <h2><span class="sec-num">00</span>The tutorial &amp; setup</h2>
     <p class="sec-sub">The heart of the workshop is a single hands-on notebook in two parts. You'll run it on a free Kaggle GPU — no local install or cluster needed.</p>
-	
-	<p> <h3> Tutorial instructions </h3>
-	1. Download the file bdbio_notebook.ipynb that was emailed to you, or is on github.com/shwetaramdas/genomicllms/ . 
-	2. Log in to your kaggle account on any internet browser, and click on Create Notebook. Import the downloaded file (file -> import notebook). 
-	3. In the settings in the right , enable internet access. 
-	Now you are ready to run your notebook.
-	
-	</p>
+    <h3 style="font-size:1.1rem;margin:14px 0 6px">Tutorial instructions</h3>
+    <ol style="margin:0 0 20px 1.2em;max-width:62ch">
+      <li>Download <code>latest-bdbio-may30.ipynb</code> — emailed to you, or from the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>.</li>
+      <li>Log in to your Kaggle account in any browser, click <b>Create → New Notebook</b>, then <b>File → Import Notebook</b> and upload the downloaded file.</li>
+      <li>In the <b>Settings</b> panel on the right, enable <b>Internet access</b>.</li>
+    </ol>
+    <p style="margin-top:-10px;color:var(--text)">Now you're ready to run the notebook.</p>
 
     <div class="tutorial">
       <p class="lbl">Run-it-yourself notebook</p>
@@ -206,9 +206,7 @@
       <!-- EDIT ME #3 — add the Kaggle notebook + slides links. GitHub/download are wired. -->
       <div class="tt-btns">
         <a href="#">Open in Kaggle</a>
-        <a class="ghost" href="latest-bdbio-may30.ipynb">Download notebook</a>
         <a class="ghost" href="https://github.com/shwetaramdas/genomicllms">View on GitHub</a>
-        <a class="ghost" href="#">View slides</a>
       </div>
     </div>
 
@@ -225,7 +223,7 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
 
   <!-- ── 01 FOUNDATION MODELS ── -->
   <section id="foundation">
-    <h2><span class="sec-num">01</span>Foundation models</h2>
+    <h2><span class="sec-num">01</span>Foundation Models in genomics</h2>
     <p class="sec-sub">The large "sequence-to-function" and generative models. Mostly <em>used</em> via API or inference rather than trained from scratch, but they define the frontier.</p>
     <div class="res">
       <div class="res-item">
@@ -252,6 +250,11 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
         <p>Predicts RNA-seq coverage directly from sequence — a strong open successor to Enformer and one of AlphaGenome's main external baselines.</p>
         <p class="links"><a href="https://github.com/calico/borzoi">GitHub</a> · <a href="https://www.nature.com/articles/s41588-024-02053-6">Paper</a></p>
       </div>
+    </div>
+    <div style="border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:18px 0 4px">
+      <div style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">How to choose a model</div>
+      <p style="margin:0 0 10px"><b>Which one should you actually use?</b> <em>A Bioinformatician's Guide to Choosing Genomic Foundation Models</em> (Tim Richardson, rewire.it, 2026) is a practical, task-by-task walk-through: it matches models to the job — DNA, protein, or single-cell — with real GPU-memory and inference-speed requirements, GenBench benchmark notes, and clear guidance on zero-shot embeddings vs. LoRA fine-tuning. The short version: start small (DNABERT-2 or ESM-2&nbsp;650M), use mean-token pooling, fine-tune with LoRA, and always validate on your own held-out data.</p>
+      <a href="https://rewire.it/blog/a-bioinformaticians-guide-to-choosing-genomic-foundation-models/" target="_blank" rel="noopener">Read the guide &#8594;</a>
     </div>
   </section>
 
@@ -365,6 +368,7 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
     <table>
       <tbody>
         <tr><td>Genomic LMs: opportunities &amp; challenges</td><td>The best single survey — Benegas et al., <em>Trends in Genetics</em> 2025. Read this first.</td><td class="mono"><a href="https://arxiv.org/abs/2407.11435">arXiv</a></td></tr>
+        <tr><td>Choosing a foundation model</td><td>Practical task-by-task guide with hardware needs and fine-tuning advice (rewire.it, 2026).</td><td class="mono"><a href="https://rewire.it/blog/a-bioinformaticians-guide-to-choosing-genomic-foundation-models/">rewire.it</a></td></tr>
         <tr><td>Attention Is All You Need</td><td>The transformer. Worth reading once even for genomics.</td><td class="mono"><a href="https://arxiv.org/abs/1706.03762">arXiv</a></td></tr>
         <tr><td>DNABERT-2</td><td>Efficient multi-species genomic LM + the GUE benchmark.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15006">arXiv</a></td></tr>
         <tr><td>Nucleotide Transformer</td><td>Robust foundation models for human genomics (<em>Nat. Methods</em>).</td><td class="mono"><a href="https://www.nature.com/articles/s41592-024-02523-z">Nature</a></td></tr>
