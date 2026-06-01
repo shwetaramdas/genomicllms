@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Key Concepts · LLMs in Genomics</title>
+<link rel="icon" href="data:,">
 <meta name="description" content="A plain-language primer on the key ideas behind large language models in genomics: tokenization, embeddings, fine-tuning, LoRA, quantization, variant scoring and evaluation." />
 <style>
   :root{
@@ -47,6 +48,12 @@
   .toc li{margin:3px 0;break-inside:avoid}
   .toc a{text-decoration:none;color:var(--text)}
   .toc a:hover{color:var(--ink);text-decoration:underline}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;margin:12px 0}
+  th{text-align:left;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--ink)}
+  td{padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{font-weight:600;color:var(--ink)}
+  td:not(:first-child){font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--text)}
   footer{margin-top:40px;border-top:1px solid var(--line);padding:24px 0 50px}
   footer p{font-size:.85rem;color:var(--muted)}
   @media(max-width:560px){h1{font-size:1.75rem}.toc ol{columns:1}}
@@ -149,6 +156,74 @@
   <section id="quant">
     <h2><span class="n">09</span>Quantization (&amp; QLoRA)</h2>
     <p>Model weights are normally stored as 32- or 16-bit floating-point numbers. <b>Quantization</b> stores them with fewer bits — typically 8-bit or 4-bit integers. The point is <b>memory</b>: a 7-billion-parameter model needs roughly 14&nbsp;GB in 16-bit but only about 3.5&nbsp;GB in 4-bit — often the difference between "won't load" and "fits on a free GPU." It can also speed up inference. The cost is a small, usually acceptable loss of precision; modern schemes (8-bit <code>LLM.int8()</code>, 4-bit <code>NF4</code>) are designed to keep that loss tiny.</p>
+    <p style="margin-top:14px"><b>How the bits are spent.</b> A floating-point number divides its bits into a <em>sign</em>, an <em>exponent</em> (which sets the <em>range</em> of values) and a <em>fraction</em>/mantissa (which sets the <em>precision</em>). Lower-precision formats simply use fewer bits:</p>
+
+    <div style="border:1px solid var(--line);border-radius:6px;padding:16px 16px 12px;margin:10px 0;overflow-x:auto">
+      <svg viewBox="0 0 640 200" width="100%" style="min-width:520px;display:block" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Helvetica,Arial,sans-serif">
+        <!-- legend -->
+        <rect x="66" y="5" width="14" height="12" fill="#444"/>
+        <text x="84" y="15" font-size="11" fill="#555">Sign</text>
+        <rect x="120" y="5" width="14" height="12" fill="#b3b3b3" stroke="#bcbcbc"/>
+        <text x="138" y="15" font-size="11" fill="#555">Exponent (range)</text>
+        <rect x="262" y="5" width="14" height="12" fill="#e6e6e6" stroke="#bcbcbc"/>
+        <text x="280" y="15" font-size="11" fill="#555">Fraction = precision</text>
+
+        <!-- FP32 -->
+        <text x="6" y="53" font-size="12" font-weight="700" fill="#1a1a1a" font-family="ui-monospace,Menlo,monospace">FP32</text>
+        <rect x="66" y="36" width="15" height="26" fill="#444" stroke="#bcbcbc"/>
+        <text x="73" y="53" font-size="10" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">1</text>
+        <rect x="81" y="36" width="120" height="26" fill="#b3b3b3" stroke="#bcbcbc"/>
+        <text x="141" y="53" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">8</text>
+        <rect x="201" y="36" width="345" height="26" fill="#e6e6e6" stroke="#bcbcbc"/>
+        <text x="373" y="53" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">23</text>
+        <text x="554" y="53" font-size="11" fill="#555">4 bytes</text>
+
+        <!-- FP16 -->
+        <text x="6" y="95" font-size="12" font-weight="700" fill="#1a1a1a" font-family="ui-monospace,Menlo,monospace">FP16</text>
+        <rect x="66" y="78" width="15" height="26" fill="#444" stroke="#bcbcbc"/>
+        <text x="73" y="95" font-size="10" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">1</text>
+        <rect x="81" y="78" width="75" height="26" fill="#b3b3b3" stroke="#bcbcbc"/>
+        <text x="118" y="95" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">5</text>
+        <rect x="156" y="78" width="150" height="26" fill="#e6e6e6" stroke="#bcbcbc"/>
+        <text x="231" y="95" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">10</text>
+        <text x="314" y="95" font-size="11" fill="#555">2 bytes</text>
+
+        <!-- BF16 -->
+        <text x="6" y="137" font-size="12" font-weight="700" fill="#1a1a1a" font-family="ui-monospace,Menlo,monospace">BF16</text>
+        <rect x="66" y="120" width="15" height="26" fill="#444" stroke="#bcbcbc"/>
+        <text x="73" y="137" font-size="10" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">1</text>
+        <rect x="81" y="120" width="120" height="26" fill="#b3b3b3" stroke="#bcbcbc"/>
+        <text x="141" y="137" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">8</text>
+        <rect x="201" y="120" width="105" height="26" fill="#e6e6e6" stroke="#bcbcbc"/>
+        <text x="253" y="137" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">7</text>
+        <text x="314" y="137" font-size="11" fill="#555">2 bytes &#183; FP32's range, less precision</text>
+
+        <!-- INT8 -->
+        <text x="6" y="179" font-size="12" font-weight="700" fill="#1a1a1a" font-family="ui-monospace,Menlo,monospace">INT8</text>
+        <rect x="66" y="162" width="120" height="26" fill="#d0d0d0" stroke="#bcbcbc"/>
+        <text x="126" y="179" font-size="11" fill="#333" text-anchor="middle" font-family="ui-monospace,monospace">8-bit integer</text>
+        <text x="194" y="179" font-size="11" fill="#555">1 byte</text>
+      </svg>
+    </div>
+
+    <table>
+      <thead><tr><th>Format</th><th>Bits</th><th>Exponent</th><th>Fraction</th><th>Memory / value</th></tr></thead>
+      <tbody>
+        <tr><td>FP32</td><td>32</td><td>8</td><td>23</td><td>4 bytes</td></tr>
+        <tr><td>FP16</td><td>16</td><td>5</td><td>10</td><td>2 bytes</td></tr>
+        <tr><td>BFLOAT16</td><td>16</td><td>8</td><td>7</td><td>2 bytes</td></tr>
+        <tr><td>INT8</td><td>8</td><td>&#8211;</td><td>7&#8201;*</td><td>1 byte</td></tr>
+        <tr><td>INT4 / NF4</td><td>4</td><td>&#8211;</td><td>&#8211;&#8201;*</td><td>&#8776; 0.5 byte</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.84rem;color:var(--muted);margin-top:-4px">* Integer formats have no exponent: INT8 is 1 sign bit + 7 value bits. 4-bit NF4 (used by QLoRA) doesn't use a plain sign/exponent/fraction split — it places values on a nonlinear scale — but still needs only about half a byte per weight.</p>
+
+    <p style="margin-top:2px">The classic worked example is storing π. Fewer fraction bits means the value gets rounded off sooner:</p>
+    <pre><span class="c">&#960; = 3.14159265358979&#8230;   (true value)</span>
+FP32 &#183; 4 bytes  &#8594;  3.1415927    <span class="c"># ~7 significant digits kept</span>
+FP16 &#183; 2 bytes  &#8594;  3.140625     <span class="c"># ~3 significant digits kept</span></pre>
+    <p class="tldr">Halving the bits halves the memory per weight; 4-bit (NF4, used in QLoRA) halves it again to about 0.5 byte each. Across billions of weights that is what decides whether a model loads on a free GPU — and for weights the lost precision is usually tolerable.</p>
+
     <p>In practice you turn it on when loading a model:</p>
     <pre><span class="c"># load a model in 4-bit to fit a small GPU (needs bitsandbytes)</span>
 from transformers import AutoModel, BitsAndBytesConfig
