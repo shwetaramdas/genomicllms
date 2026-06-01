@@ -103,7 +103,12 @@
     <p><b>Single-nucleotide</b> — one token per base. Maximum resolution, but the longest sequences. Used by HyenaDNA and Evo.<br>
     <b>k-mer</b> — fixed windows of <code>k</code> bases. DNABERT-1 used <em>overlapping</em> 6-mers; Nucleotide Transformer uses <em>non-overlapping</em> 6-mers. Overlapping k-mers leak information between adjacent tokens and are now generally avoided.<br>
     <b>Byte-pair encoding (BPE)</b> — learns frequent sub-sequences as tokens, compressing length. Used by DNABERT-2 and Mistral-DNA.</p>
-    <div class="tie"><b>In the tutorial:</b> when you call <code>AutoTokenizer.from_pretrained(...)</code>, this is the step turning your DNA string into the integers the model actually sees.</div>
+    <p><b>How BPE works.</b> Start with just the four bases as the vocabulary. Scan the genome for the most frequent adjacent pair of tokens, merge it into a single new token, and repeat until you reach a target vocabulary size. Frequent substrings — common motifs and repeats — collapse into one token each, while rare stretches stay as smaller pieces. The result is a fixed-size vocabulary that compresses sequences (fewer tokens to process) and never hits an "unknown" base, since it can always fall back to single nucleotides. It's the same algorithm that tokenizes English in GPT-style models — which is why Mistral-DNA can reuse the Mistral architecture on DNA.</p>
+    <pre><span class="c"># BPE on a repetitive stretch — the vocabulary grows, the token count shrinks</span>
+start        A T G A T G A T G    <span class="c"># 9 tokens (vocab = A C G T)</span>
++ merge TG   A TG A TG A TG       <span class="c"># 6 tokens (added "TG")</span>
++ merge ATG  ATG ATG ATG          <span class="c"># 3 tokens (added "ATG")</span></pre>
+    <div class="tie"><b>In the tutorial:</b> when you call <code>AutoTokenizer.from_pretrained(...)</code>, this is the step turning your DNA string into the integers the model sees. Mistral-DNA (Part 1) uses BPE; Nucleotide Transformer (Part 2) uses fixed non-overlapping 6-mers — same step, different chunking.</div>
   </section>
 
   <section id="embed">
