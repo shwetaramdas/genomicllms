@@ -288,9 +288,9 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
           <td class="mono"><a href="https://huggingface.co/AIRI-Institute">HF</a> · <a href="https://github.com/AIRI-Institute/GENA_LM">code</a></td>
         </tr>
         <tr>
-          <td>GPN / GPN-MSA</td>
-          <td>Convolutional DNA LM (Song lab) built for unsupervised, zero-shot variant-effect prediction. GPN trains per-species on reference genomes; GPN-MSA uses multispecies alignments for the human genome, with precomputed scores for all ~9&nbsp;billion possible SNVs.</td>
-          <td class="mono"><a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">PNAS</a></td>
+          <td>GPN family</td>
+          <td>Song-lab DNA models built for unsupervised, zero-shot variant-effect prediction: <b>GPN</b> (per-species, on reference genomes) → <b>GPN-MSA</b> (multispecies alignments for the human genome; precomputed scores for all ~9&nbsp;billion SNVs) → <b>GPN-Star</b> <span class="badge">SOTA</span>, a phylogeny-aware model that uses the species tree to constrain attention across species and currently reports state-of-the-art variant-effect prediction, beating GPN-MSA across coding and non-coding variants.</td>
+          <td class="mono"><a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.biorxiv.org/content/10.1101/2025.09.21.677619v1">GPN-Star</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">GPN</a></td>
         </tr>
       </tbody>
     </table>
