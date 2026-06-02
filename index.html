@@ -141,8 +141,8 @@
     <div class="meta">
       <div><div class="k">Date</div><div class="v">4 June 2026</div></div>
       <div><div class="k">Repository</div><div class="v"><a href="https://github.com/shwetaramdas/genomicllms">github.com/shwetaramdas/genomicllms</a></div></div>
-      <div><div class="k">New here?</div><div class="v"><a href="concepts.html">Start with the concepts primer →</a></div></div>
     </div>
+    <p style="margin-top:14px;font-size:.95rem;color:var(--muted)">New here?<br><a href="concepts.html" style="color:var(--ink);font-weight:600">Start with the concepts primer &#8594;</a></p>
   </div>
 </header>
 
@@ -150,12 +150,13 @@
   <div class="wrap" style="padding:0">
     <ul>
       <li><a href="#start">00 · Tutorial &amp; setup</a></li>
-      <li><a href="#foundation">01 · Foundation Models in genomics</a></li>
+      <li><a href="#foundation">01 · Some genomic foundation models</a></li>
       <li><a href="#dnalm">02 · Fine-tunable DNA LMs</a></li>
       <li><a href="#handson">03 · Hands-on</a></li>
       <li><a href="#data">04 · Data &amp; benchmarks</a></li>
       <li><a href="#reading">05 · Key reading</a></li>
-      <li><a href="#adjacent">06 · Beyond DNA</a></li>
+      <li><a href="#adjacent">06 · Protein foundation models</a></li>
+      <li><a href="#questions">07 · Questions to think about</a></li>
       <li><a href="concepts.html" style="font-weight:600;color:var(--ink)">Key concepts →</a></li>
     </ul>
   </div>
@@ -205,8 +206,7 @@
 
       <!-- EDIT ME #3 — add the Kaggle notebook + slides links. GitHub/download are wired. -->
       <div class="tt-btns">
-        <a href="#">Open in Kaggle</a>
-        <a class="ghost" href="https://github.com/shwetaramdas/genomicllms">View on GitHub</a>
+        <a href="https://github.com/shwetaramdas/genomicllms">View on GitHub</a>
       </div>
     </div>
 
@@ -223,7 +223,7 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
 
   <!-- ── 01 FOUNDATION MODELS ── -->
   <section id="foundation">
-    <h2><span class="sec-num">01</span>Foundation Models in genomics</h2>
+    <h2><span class="sec-num">01</span>Some genomic foundation models</h2>
     <p class="sec-sub">The large "sequence-to-function" and generative models. Mostly <em>used</em> via API or inference rather than trained from scratch, but they define the frontier.</p>
     <div class="res">
       <div class="res-item">
@@ -294,6 +294,11 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
           <td>GENA-LM</td>
           <td>Long-context BERT-style human genomic models from AIRI.</td>
           <td class="mono"><a href="https://huggingface.co/AIRI-Institute">HF</a> · <a href="https://github.com/AIRI-Institute/GENA_LM">code</a></td>
+        </tr>
+        <tr>
+          <td>GPN / GPN-MSA</td>
+          <td>Convolutional DNA LM (Song lab) built for unsupervised, zero-shot variant-effect prediction. GPN trains per-species on reference genomes; GPN-MSA uses multispecies alignments for the human genome, with precomputed scores for all ~9&nbsp;billion possible SNVs.</td>
+          <td class="mono"><a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">PNAS</a></td>
         </tr>
       </tbody>
     </table>
@@ -381,8 +386,8 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
 
   <!-- ── 06 BEYOND DNA ── -->
   <section id="adjacent">
-    <h2><span class="sec-num">06</span>Beyond DNA</h2>
-    <p class="sec-sub">If the workshop strays toward proteins or single-cell data, these are the canonical foundation models.</p>
+    <h2><span class="sec-num">06</span>Protein foundation models</h2>
+    <p class="sec-sub">Genomic language models have direct counterparts for proteins — these are the canonical protein foundation models.</p>
     <div class="res">
       <div class="res-item">
         <span class="tag">Protein</span><h3>ESM-2 / ESM-3</h3>
@@ -394,12 +399,19 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
         <p>The structure-prediction model that reframed the field. Database + open code.</p>
         <p class="links"><a href="https://alphafold.ebi.ac.uk">DB</a> · <a href="https://github.com/google-deepmind/alphafold">Code</a></p>
       </div>
-      <div class="res-item">
-        <span class="tag">Single-cell</span><h3>Geneformer / scGPT</h3>
-        <p>Transformer foundation models for single-cell transcriptomics — cell-type annotation, perturbation, gene networks.</p>
-        <p class="links"><a href="https://huggingface.co/ctheodoris/Geneformer">Geneformer</a> · <a href="https://github.com/bowang-lab/scGPT">scGPT</a></p>
-      </div>
     </div>
+  </section>
+  <!-- ── 07 QUESTIONS ── -->
+  <section id="questions">
+    <h2><span class="sec-num">07</span>Questions to think about</h2>
+    <p class="sec-sub">No single right answers — these are the judgement calls that separate <em>using</em> a model from using it well. Worth chewing on during the workshop and after.</p>
+    <ol style="margin:4px 0 8px 1.2em;line-height:1.6">
+      <li style="margin:10px 0"><b>Choosing a model.</b> How do you select the best model for a given task — by sequence length, organism, task type, architecture, or simply what fits on your GPU?</li>
+      <li style="margin:10px 0"><b>Using it in your research.</b> Where would a genomic LM actually fit into your own work — as a feature extractor, a variant scorer, a baseline to beat, or a hypothesis generator?</li>
+      <li style="margin:10px 0"><b>Evaluating a model.</b> How do you judge one honestly? Which metric (accuracy, F1, MCC, AUROC) suits your data — and does a strong benchmark number really mean biological insight?</li>
+      <li style="margin:10px 0"><b>Thinking about training data.</b> What makes good training or fine-tuning data here? How do organism bias, class imbalance, and leakage between train and test sets change what you can trust?</li>
+      <li style="margin:10px 0"><b>Knowing the limits.</b> When does the "DNA as a language" analogy break down — and when might a simple, well-tuned baseline beat a foundation model outright?</li>
+    </ol>
   </section>
 
 </main>
