@@ -160,10 +160,10 @@
   <!-- ── 00 TUTORIAL & SETUP ── -->
   <section id="start">
     <h2><span class="sec-num">00</span>The tutorial &amp; setup</h2>
-    <p class="sec-sub">The heart of the workshop is a single hands-on notebook in two parts. You'll run it on a free Kaggle GPU — no local install or cluster needed.</p>
+    <p class="sec-sub">The heart of the workshop is a single hands-on notebook in two parts. You'll run it on a free Kaggle GPU. No local install or cluster needed.</p>
     <h3 style="font-size:1.1rem;margin:14px 0 6px">Tutorial instructions</h3>
     <ol style="margin:0 0 20px 1.2em;max-width:62ch">
-      <li>Download <code>bdbioworkshop.ipynb</code> — emailed to you, or from the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>.</li>
+      <li>Download <code>bdbioworkshop.ipynb</code>, emailed to you or available from the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>.</li>
       <li>Log in to your Kaggle account in any browser, click <b>Create → New Notebook</b>, then <b>File → Import Notebook</b> and upload the downloaded file.</li>
       <li>In the <b>Settings</b> panel on the right, enable <b>Internet access</b>.</li>
     </ol>
@@ -171,7 +171,7 @@
 
     <div class="tutorial">
       <p class="lbl">Run-it-yourself notebook</p>
-      <h3 style="font-size:1.15rem">BDBio 2026 — LLMs in Genomics</h3>
+      <h3 style="font-size:1.15rem">BDBio 2026: LLMs in Genomics</h3>
       <p style="margin-top:2px;color:var(--text)">From loading a tiny DNA language model to fine-tuning a 500M-parameter foundation model on real regulatory-genomics tasks, start to finish on a free GPU.</p>
 
       <div class="tt-parts">
@@ -190,8 +190,8 @@
           <h4>LoRA on Nucleotide Transformer</h4>
           <ul>
             <li>Adapt <code>NT-500M-human-ref</code> with PEFT / LoRA</li>
-            <li>Task 1 — promoter prediction (F1 ≈ 0.94 in ~1000 steps)</li>
-            <li>Task 2 — enhancer prediction, scored by MCC on imbalanced data</li>
+            <li>Task 1: promoter prediction (F1 ≈ 0.94 in ~1000 steps)</li>
+            <li>Task 2: enhancer prediction, scored by MCC on imbalanced data</li>
             <li>Compare against the published Nucleotide Transformer results</li>
           </ul>
         </div>
@@ -207,7 +207,7 @@
 pip install transformers==4.41.0 peft==0.10.0 datasets accelerate
 pip install biopython huggingface_hub
 
-<span class="c"># Part 1 — load the toy DNA language model</span>
+<span class="c"># Part 1: load the toy DNA language model</span>
 from transformers import AutoTokenizer, AutoModel
 tok = AutoTokenizer.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_remote_code=True)
 mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_remote_code=True)</pre>
@@ -239,13 +239,13 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
       <div class="res-item">
         <span class="tag">Calico · regulatory</span>
         <h3>Borzoi</h3>
-        <p>Predicts RNA-seq coverage directly from sequence — a strong open successor to Enformer and one of AlphaGenome's main external baselines.</p>
+        <p>Predicts RNA-seq coverage directly from sequence. A strong open successor to Enformer and one of AlphaGenome's main external baselines.</p>
         <p class="links"><a href="https://github.com/calico/borzoi">GitHub</a> · <a href="https://www.nature.com/articles/s41588-024-02053-6">Paper</a></p>
       </div>
     </div>
     <div style="border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:18px 0 4px">
       <div style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">How to choose a model</div>
-      <p style="margin:0 0 10px"><b>Which one should you actually use?</b> <em>A Bioinformatician's Guide to Choosing Genomic Foundation Models</em> (Tim Richardson, rewire.it, 2026) is a practical, task-by-task walk-through: it matches models to the job — DNA, protein, or single-cell — with real GPU-memory and inference-speed requirements, GenBench benchmark notes, and clear guidance on zero-shot embeddings vs. LoRA fine-tuning. The short version: start small (DNABERT-2 or ESM-2&nbsp;650M), use mean-token pooling, fine-tune with LoRA, and always validate on your own held-out data.</p>
+      <p style="margin:0 0 10px"><b>Which one should you actually use?</b> <em>A Bioinformatician's Guide to Choosing Genomic Foundation Models</em> (Tim Richardson, rewire.it, 2026) is a practical, task-by-task walk-through: it matches models to the job (DNA, protein, or single-cell) with real GPU-memory and inference-speed requirements, GenBench benchmark notes, and clear guidance on zero-shot embeddings vs. LoRA fine-tuning. The short version: start small (DNABERT-2 or ESM-2&nbsp;650M), use mean-token pooling, fine-tune with LoRA, and always validate on your own held-out data.</p>
       <a href="https://rewire.it/blog/a-bioinformaticians-guide-to-choosing-genomic-foundation-models/" target="_blank" rel="noopener">Read the guide &#8594;</a>
     </div>
   </section>
@@ -256,10 +256,10 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
     <p class="sec-sub">These range from zero-shot variant scorers to small models you can fine-tune yourself on a free GPU. One family stands out for variant-effect prediction:</p>
     <div style="border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:0 0 22px">
       <div style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">Featured · variant-effect prediction</div>
-      <p style="margin:0 0 10px"><b>GPN family</b> (Song lab) — DNA models built for <em>unsupervised, zero-shot</em> variant-effect prediction: score a mutation by how much it lowers the model's likelihood, no labels needed (the same idea Part 1 uses on the <em>CFTR</em> variant). The line runs <b>GPN</b> (per-species, on reference genomes) → <b>GPN-MSA</b> (multispecies alignments for the human genome; precomputed scores for all ~9&nbsp;billion SNVs) → <b>GPN-Star</b> <span class="badge">SOTA</span>, a phylogeny-aware model that constrains attention with the species tree and currently reports state-of-the-art variant-effect prediction, beating GPN-MSA across coding and non-coding regions.</p>
+      <p style="margin:0 0 10px"><b>GPN family</b> (Song lab). DNA models built for <em>unsupervised, zero-shot</em> variant-effect prediction: score a mutation by how much it lowers the model's likelihood, no labels needed (the same idea Part 1 uses on the <em>CFTR</em> variant). The line runs <b>GPN</b> (per-species, on reference genomes) → <b>GPN-MSA</b> (multispecies alignments for the human genome; precomputed scores for all ~9&nbsp;billion SNVs) → <b>GPN-Star</b> <span class="badge">SOTA</span>, a phylogeny-aware model that constrains attention with the species tree and currently reports state-of-the-art variant-effect prediction, beating GPN-MSA across coding and non-coding regions.</p>
       <a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.biorxiv.org/content/10.1101/2025.09.21.677619v1">GPN-Star paper</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">GPN paper</a>
     </div>
-    <p class="sec-sub" style="margin-bottom:14px">Models you can load and fine-tune yourself with <code>LoRA</code>/PEFT, in minutes-to-hours — all on the Hugging Face Hub:</p>
+    <p class="sec-sub" style="margin-bottom:14px">Models you can load and fine-tune yourself with <code>LoRA</code>/PEFT, in minutes-to-hours, all on the Hugging Face Hub:</p>
     <table>
       <thead><tr><th>Model</th><th>What it is</th><th>Hub / code</th></tr></thead>
       <tbody>
@@ -295,8 +295,8 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
         </tr>
       </tbody>
     </table>
-    <p class="note">Tip for the live session: pick <em>one</em> model + <em>one</em> binary task and run the whole load → tokenise → LoRA → evaluate loop end-to-end — exactly what Part 2 of the tutorial does.</p>
-    <p class="note">A caveat to carry through all of these: a vocal line of expert critique (notably Anshul Kundaje) holds that reported benchmark wins in this field are often inflated by flawed evaluations — so read leaderboard and "state-of-the-art" claims with care, compare against strong supervised baselines, and validate on your own data. More in <a href="concepts.html#caveat">the concepts primer</a>.</p>
+    <p class="note">Tip for the live session: pick <em>one</em> model + <em>one</em> binary task and run the whole load → tokenise → LoRA → evaluate loop end-to-end. That is exactly what Part 2 of the tutorial does.</p>
+    <p class="note">A caveat to carry through all of these: a vocal line of expert critique (notably Anshul Kundaje) holds that reported benchmark wins in this field are often inflated by flawed evaluations, so read leaderboard and "state-of-the-art" claims with care, compare against strong supervised baselines, and validate on your own data. More in <a href="concepts.html#caveat">the concepts primer</a>.</p>
   </section>
 
   <!-- ── 03 HANDS-ON ── -->
@@ -316,7 +316,7 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
       </div>
       <div class="res-item">
         <span class="tag">Course · audit free</span><h3>Generative AI with LLMs</h3>
-        <p>DeepLearning.AI &amp; AWS course on how LLMs actually work — transformer internals, prompting, fine-tuning, PEFT/LoRA and RLHF. A solid conceptual backbone for the genomics tutorial.</p>
+        <p>DeepLearning.AI &amp; AWS course on how LLMs actually work: transformer internals, prompting, fine-tuning, PEFT/LoRA and RLHF. A solid conceptual backbone for the genomics tutorial.</p>
         <p class="links"><a href="https://www.coursera.org/learn/generative-ai-with-llms/home/welcome">Coursera</a></p>
       </div>
       <div class="res-item">
@@ -344,12 +344,12 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
       </div>
       <div class="res-item">
         <span class="tag">Benchmark</span><h3>GUE</h3>
-        <p>Genome Understanding Evaluation — 28 datasets across 7 tasks, bundled with the DNABERT-2 repo. A standard yardstick for DNA LMs.</p>
+        <p>Genome Understanding Evaluation: 28 datasets across 7 tasks, bundled with the DNABERT-2 repo. A standard yardstick for DNA LMs.</p>
         <p class="links"><a href="https://github.com/MAGICS-LAB/DNABERT_2">via DNABERT-2</a></p>
       </div>
       <div class="res-item">
         <span class="tag">Leaderboard</span><h3>NT Benchmark</h3>
-        <p>Interactive leaderboard comparing NT, DNABERT-2, HyenaDNA and Enformer across 18 downstream tasks — useful for choosing a model.</p>
+        <p>Interactive leaderboard comparing NT, DNABERT-2, HyenaDNA and Enformer across 18 downstream tasks. Useful for choosing a model.</p>
         <p class="links"><a href="https://huggingface.co/spaces/InstaDeepAI/nucleotide_transformer_benchmark">HF Space</a></p>
       </div>
       <div class="res-item">
@@ -363,10 +363,10 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
   <!-- ── 05 KEY READING ── -->
   <section id="reading">
     <h2><span class="sec-num">05</span>Key reading</h2>
-    <p class="sec-sub">A short, high-signal reading path — from the architecture that started it all to the current frontier and an honest review of the field.</p>
+    <p class="sec-sub">A short, high-signal reading path, from the architecture that started it all to the current frontier and an honest review of the field.</p>
     <table>
       <tbody>
-        <tr><td>Genomic LMs: opportunities &amp; challenges</td><td>The best single survey — Benegas et al., <em>Trends in Genetics</em> 2025. Read this first.</td><td class="mono"><a href="https://arxiv.org/abs/2407.11435">arXiv</a></td></tr>
+        <tr><td>Genomic LMs: opportunities &amp; challenges</td><td>The best single survey. Benegas et al., <em>Trends in Genetics</em> 2025. Read this first.</td><td class="mono"><a href="https://arxiv.org/abs/2407.11435">arXiv</a></td></tr>
         <tr><td>Choosing a foundation model</td><td>Practical task-by-task guide with hardware needs and fine-tuning advice (rewire.it, 2026).</td><td class="mono"><a href="https://rewire.it/blog/a-bioinformaticians-guide-to-choosing-genomic-foundation-models/">rewire.it</a></td></tr>
         <tr><td>Attention Is All You Need</td><td>The transformer. Worth reading once even for genomics.</td><td class="mono"><a href="https://arxiv.org/abs/1706.03762">arXiv</a></td></tr>
         <tr><td>DNABERT-2</td><td>Efficient multi-species genomic LM + the GUE benchmark.</td><td class="mono"><a href="https://arxiv.org/abs/2306.15006">arXiv</a></td></tr>
@@ -381,11 +381,11 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
   <!-- ── 06 BEYOND DNA ── -->
   <section id="adjacent">
     <h2><span class="sec-num">06</span>Protein foundation models</h2>
-    <p class="sec-sub">Genomic language models have direct counterparts for proteins — these are the canonical protein foundation models.</p>
+    <p class="sec-sub">Genomic language models have direct counterparts for proteins. These are the canonical protein foundation models.</p>
     <div class="res">
       <div class="res-item">
         <span class="tag">Protein</span><h3>ESM-2 / ESM-3</h3>
-        <p>Protein language models from Meta / EvolutionaryScale — embeddings, structure prediction and design.</p>
+        <p>Protein language models from Meta / EvolutionaryScale: embeddings, structure prediction and design.</p>
         <p class="links"><a href="https://github.com/facebookresearch/esm">ESM-2</a> · <a href="https://github.com/evolutionaryscale/esm">ESM-3</a></p>
       </div>
       <div class="res-item">
@@ -398,13 +398,13 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
   <!-- ── 07 QUESTIONS ── -->
   <section id="questions">
     <h2><span class="sec-num">07</span>Questions to think about</h2>
-    <p class="sec-sub">No single right answers — these are the judgement calls that separate <em>using</em> a model from using it well. Worth chewing on during the workshop and after.</p>
+    <p class="sec-sub">No single right answers. These are the judgement calls that separate <em>using</em> a model from using it well. Worth chewing on during the workshop and after.</p>
     <ol style="margin:4px 0 8px 1.2em;line-height:1.6">
-      <li style="margin:10px 0"><b>Choosing a model.</b> How do you select the best model for a given task — by sequence length, organism, task type, architecture, or simply what fits on your GPU?</li>
-      <li style="margin:10px 0"><b>Using it in your research.</b> Where would a genomic LM actually fit into your own work — as a feature extractor, a variant scorer, a baseline to beat, or a hypothesis generator?</li>
-      <li style="margin:10px 0"><b>Evaluating a model.</b> How do you judge one honestly? Which metric (accuracy, F1, MCC, AUROC) suits your data — and does a strong benchmark number really mean biological insight?</li>
+      <li style="margin:10px 0"><b>Choosing a model.</b> How do you select the best model for a given task: by sequence length, organism, task type, architecture, or simply what fits on your GPU?</li>
+      <li style="margin:10px 0"><b>Using it in your research.</b> Where would a genomic LM actually fit into your own work: as a feature extractor, a variant scorer, a baseline to beat, or a hypothesis generator?</li>
+      <li style="margin:10px 0"><b>Evaluating a model.</b> How do you judge one honestly? Which metric (accuracy, F1, MCC, AUROC) suits your data, and does a strong benchmark number really mean biological insight?</li>
       <li style="margin:10px 0"><b>Thinking about training data.</b> What makes good training or fine-tuning data here? How do organism bias, class imbalance, and leakage between train and test sets change what you can trust?</li>
-      <li style="margin:10px 0"><b>Knowing the limits.</b> When does the "DNA as a language" analogy break down — and when might a simple, well-tuned baseline beat a foundation model outright?</li>
+      <li style="margin:10px 0"><b>Knowing the limits.</b> When does the "DNA as a language" analogy break down, and when might a simple, well-tuned baseline beat a foundation model outright?</li>
     </ol>
   </section>
 
@@ -412,7 +412,7 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
 
 <footer>
   <div class="wrap">
-    <p>Questions, fixes, or a resource missing? Open an issue on the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>. All linked tools belong to their respective authors — check each model's licence before use. Last reviewed: June 2026.</p>
+    <p>Questions, fixes, or a resource missing? Open an issue on the <a href="https://github.com/shwetaramdas/genomicllms">repository</a>. All linked tools belong to their respective authors. Check each model's licence before use. Last reviewed: June 2026.</p>
   </div>
 </footer>
 
