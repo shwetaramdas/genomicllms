@@ -155,6 +155,21 @@ start        A T G A T G A T G    <span class="c"># 9 tokens (vocab = A C G T)</
     <h2><span class="n">08</span>PEFT &amp; LoRA</h2>
     <p>Full fine-tuning updates every weight in the model — accurate but memory-hungry. <b>Parameter-efficient fine-tuning (PEFT)</b> freezes the original model and trains only a small set of new parameters bolted on top.</p>
     <p><b>LoRA</b> (Low-Rank Adaptation) is the most common form. Instead of updating a big weight matrix <code>W</code> directly, it learns a small low-rank correction <code>ΔW = B·A</code>, where <code>A</code> and <code>B</code> are tiny (rank <code>r</code> much smaller than the matrix width). You train <code>A</code> and <code>B</code>, leave <code>W</code> frozen, and add them back at inference. This cuts trainable parameters by orders of magnitude — which is exactly what makes fine-tuning a 500M-parameter model feasible on a free GPU.</p>
+    <p><b>Why low rank works.</b> The change a pretrained model needs in order to specialise to one task turns out to live in a tiny subspace — so a low-rank <code>ΔW</code> captures almost all of it. That's why you can skip the vast majority of the parameters and lose very little accuracy.</p>
+    <pre><span class="c"># the saving, for one 1024 x 1024 weight matrix at rank r = 8</span>
+full fine-tune   1024 x 1024          = 1,048,576 params
+LoRA (rank 8)    8 x (1024 + 1024)    =    16,384 params   <span class="c"># ~64x fewer</span></pre>
+    <p>In the PEFT library it's a few lines, and the same config drives Part 2 of the tutorial:</p>
+    <pre><span class="c"># wrap a frozen base model with trainable LoRA adapters</span>
+from peft import LoraConfig, get_peft_model, TaskType
+cfg = LoraConfig(
+    task_type=TaskType.SEQ_CLS,          <span class="c"># classification head (promoter / enhancer)</span>
+    r=8, lora_alpha=16,                  <span class="c"># rank, and how strongly the update is scaled</span>
+    target_modules=["query", "value"],   <span class="c"># which layers get adapters (names are model-specific)</span>
+    lora_dropout=0.05,
+)
+model = get_peft_model(base_model, cfg)
+model.print_trainable_parameters()       <span class="c"># trainable: &lt;1% of all params</span></pre>
     <div class="tie"><b>In the tutorial:</b> Part 2 uses LoRA on <code>NT-500M</code> — only the adapters are trained, so it finishes in minutes on Kaggle.</div>
   </section>
 
@@ -256,10 +271,11 @@ mdl = AutoModel.from_pretrained(name, quantization_config=cfg, trust_remote_code
   </section>
 
   <section id="caveat">
-    <h2><span class="n">12</span>Is DNA really a "language"?</h2>
-    <p>The analogy that powers all of this — treat DNA like text and reuse NLP — is productive but loose, and it's worth holding loosely. DNA has no clean word boundaries; its most important "rules" are biochemical and act over enormous distances; and a high model likelihood is not the same thing as a real biological function. There's active debate about how much genomic LMs truly add over well-tuned, task-specific models on some benchmarks, and about how much benchmark scores reflect genuine biological insight versus dataset artifacts.</p>
-    <p>None of that diminishes the tools — it just means treating them as powerful statistical priors over sequence, not oracles. For a careful, balanced overview, the survey below is the best starting point.</p>
-    <p class="tldr"><b>Read next:</b> Benegas et al., <a href="https://arxiv.org/abs/2407.11435">Genomic language models: opportunities and challenges</a> (<em>Trends in Genetics</em>, 2025).</p>
+    <h2><span class="n">12</span>Is DNA really a "language"? — a reality check</h2>
+    <p>The analogy that powers all of this — treat DNA like text and reuse the NLP toolkit — is productive but loose, and worth holding loosely. DNA has no clean word boundaries; its most important "rules" are biochemical and act over enormous distances; and a high model likelihood is not the same thing as a real biological function.</p>
+    <p>It is also genuinely contested how much genomic LMs add. A prominent strand of expert skepticism — Anshul Kundaje (Stanford) among others — argues that much of the reported progress rests on <b>flawed benchmarks</b>; "bad benchmarks propagate," in his phrase. The recurring problems are concrete: data leakage between training and test sets; variant-effect benchmarks that ignore linkage disequilibrium and so overstate how well a model pinpoints the truly causal variant; and models tuned to win on surrogate objectives rather than real biological endpoints — optimised to pass the test rather than do the biology. On many functional-genomics tasks, well-designed <em>supervised</em> models — and sometimes simple baselines or plain sequence conservation — match or beat self-supervised gLMs, and the clean scaling wins seen in NLP have not clearly materialised. Recent probing work even finds gLMs leaning on surface base-composition rather than positional regulatory grammar, with scale amplifying the gap rather than closing it.</p>
+    <p>Crucially, this isn't anti-deep-learning: the same critics champion strong <em>supervised</em> models (SpliceAI, Enformer/Borzoi). The point is to treat gLMs as one tool among many — compare against strong supervised baselines and conservation, evaluate on rigorous benchmarks and real endpoints, and always validate on held-out data. Used that way they are powerful statistical priors over sequence, not oracles.</p>
+    <p class="tldr"><b>Read next:</b> Benegas et al., <a href="https://arxiv.org/abs/2407.11435">Genomic language models: opportunities and challenges</a> (<em>Trends in Genetics</em>, 2025) · the skeptic's case in Nature's <a href="https://www.nature.com/articles/d41586-025-02462-5">Building better benchmarks</a> (2025) · Koo et al., <a href="https://arxiv.org/abs/2602.01230">Toward Interpretable and Generalizable AI in Regulatory Genomics</a> (2026).</p>
   </section>
 
 </main>

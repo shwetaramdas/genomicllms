@@ -253,7 +253,13 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
   <!-- ── 02 FINE-TUNABLE DNA LMs ── -->
   <section id="dnalm">
     <h2><span class="sec-num">02</span>DNA language models you can fine-tune</h2>
-    <p class="sec-sub">Small-to-medium models that load on a free GPU and fine-tune in minutes-to-hours with <code>LoRA</code>/PEFT. All are on the Hugging Face Hub.</p>
+    <p class="sec-sub">These range from zero-shot variant scorers to small models you can fine-tune yourself on a free GPU. One family stands out for variant-effect prediction:</p>
+    <div style="border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:0 0 22px">
+      <div style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">Featured · variant-effect prediction</div>
+      <p style="margin:0 0 10px"><b>GPN family</b> (Song lab) — DNA models built for <em>unsupervised, zero-shot</em> variant-effect prediction: score a mutation by how much it lowers the model's likelihood, no labels needed (the same idea Part 1 uses on the <em>CFTR</em> variant). The line runs <b>GPN</b> (per-species, on reference genomes) → <b>GPN-MSA</b> (multispecies alignments for the human genome; precomputed scores for all ~9&nbsp;billion SNVs) → <b>GPN-Star</b> <span class="badge">SOTA</span>, a phylogeny-aware model that constrains attention with the species tree and currently reports state-of-the-art variant-effect prediction, beating GPN-MSA across coding and non-coding regions.</p>
+      <a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.biorxiv.org/content/10.1101/2025.09.21.677619v1">GPN-Star paper</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">GPN paper</a>
+    </div>
+    <p class="sec-sub" style="margin-bottom:14px">Models you can load and fine-tune yourself with <code>LoRA</code>/PEFT, in minutes-to-hours — all on the Hugging Face Hub:</p>
     <table>
       <thead><tr><th>Model</th><th>What it is</th><th>Hub / code</th></tr></thead>
       <tbody>
@@ -287,14 +293,10 @@ mdl = AutoModel.from_pretrained("RaphaelMourad/Mistral-DNA-v1-17M-hg38", trust_r
           <td>Long-context BERT-style human genomic models from AIRI.</td>
           <td class="mono"><a href="https://huggingface.co/AIRI-Institute">HF</a> · <a href="https://github.com/AIRI-Institute/GENA_LM">code</a></td>
         </tr>
-        <tr>
-          <td>GPN family</td>
-          <td>Song-lab DNA models built for unsupervised, zero-shot variant-effect prediction: <b>GPN</b> (per-species, on reference genomes) → <b>GPN-MSA</b> (multispecies alignments for the human genome; precomputed scores for all ~9&nbsp;billion SNVs) → <b>GPN-Star</b> <span class="badge">SOTA</span>, a phylogeny-aware model that uses the species tree to constrain attention across species and currently reports state-of-the-art variant-effect prediction, beating GPN-MSA across coding and non-coding variants.</td>
-          <td class="mono"><a href="https://github.com/songlab-cal/gpn">code</a> · <a href="https://www.biorxiv.org/content/10.1101/2025.09.21.677619v1">GPN-Star</a> · <a href="https://www.pnas.org/doi/10.1073/pnas.2311219120">GPN</a></td>
-        </tr>
       </tbody>
     </table>
     <p class="note">Tip for the live session: pick <em>one</em> model + <em>one</em> binary task and run the whole load → tokenise → LoRA → evaluate loop end-to-end — exactly what Part 2 of the tutorial does.</p>
+    <p class="note">A caveat to carry through all of these: a vocal line of expert critique (notably Anshul Kundaje) holds that reported benchmark wins in this field are often inflated by flawed evaluations — so read leaderboard and "state-of-the-art" claims with care, compare against strong supervised baselines, and validate on your own data. More in <a href="concepts.html#caveat">the concepts primer</a>.</p>
   </section>
 
   <!-- ── 03 HANDS-ON ── -->
